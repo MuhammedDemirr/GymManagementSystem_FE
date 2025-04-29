@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Randevu Al</title>
+  <link rel="stylesheet" href="stylerandevu.css">
+</head>
+<body>
+
+  <div class="container">
+    <h2>Randevu Al</h2>
+
+    <label for="date">Tarih Seçiniz:</label>
+    <input type="date" id="date">
+
+    <div id="trainer-section" style="display: none;">
+      <label for="trainer">Eğitmen Seçiniz:</label>
+      <select id="trainer">
+        <option>Ahmet Yılmaz</option>
+        <option>Elif Demir</option>
+        <option>Mehmet Kaya</option>
+      </select>
+    </div>
+
+    <button onclick="checkDate()">Devam Et</button>
+
+    <div class="error" id="error-message" style="display: none;"></div>
+    <div class="success" id="success-message" style="display: none;"></div>
+  </div>
+
+  <script>
+    function checkDate() {
+      const dateInput = document.getElementById('date').value;
+      const errorDiv = document.getElementById('error-message');
+      const successDiv = document.getElementById('success-message');
+      const trainerSection = document.getElementById('trainer-section');
+
+      errorDiv.style.display = 'none';
+      successDiv.style.display = 'none';
+
+      if (!dateInput) {
+        errorDiv.innerText = 'Lütfen bir tarih seçiniz!';
+        errorDiv.style.display = 'block';
+        trainerSection.style.display = 'none';
+        return;
+      }
+
+      const selectedDate = new Date(dateInput);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate < today) {
+        errorDiv.innerText = 'Geçmiş bir tarih seçilemez!';
+        errorDiv.style.display = 'block';
+        trainerSection.style.display = 'none';
+        return;
+      }
+
+      trainerSection.style.display = 'block';
+
+      successDiv.innerText = 'Tarih uygun. Eğitmen seçiniz ve tekrar devam edin.';
+      successDiv.style.display = 'block';
+
+      document.querySelector("button").innerText = "Randevuyu Kaydet";
+      document.querySelector("button").onclick = function () {
+        successDiv.innerText = "✅ Randevunuz başarıyla kaydedildi.";
+        errorDiv.style.display = 'none';
+        successDiv.style.display = 'block';
+        trainerSection.style.display = 'none';
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom right, #5f0fd6, #2196f3);
+    color: white;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+  }
+  
+  /* Başlık */
+  header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  header h1 {
+    font-size: 2rem;
+    color: #ffcc00;
+  }
+  
+  header span {
+    font-size: 1rem;
+    color: #ffffffcc;
+  }
+  
+  header p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    color: #eeeeee;
+  }
+  
+  /* SSS Bölümü */
+  .faq {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-left: 5px solid #ffee58;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .faq h2 {
+    color: #ffeb3b;
+    margin-top: 0;
+  }
+  
+  .question {
+    margin-bottom: 15px;
+  }
+  
+  /* Geri Bildirim */
+  .feedback {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-left: 5px solid #4caf50;
+    border-radius: 15px;
+    padding: 20px;
+  }
+  
+  .feedback h2 {
+    color: #8bc34a;
+    margin-top: 0;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  input, textarea {
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+  }
+  
+  textarea {
+    resize: vertical;
+  }
+  
+  button {
+    background-color: #ffcc00;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  button:hover {
+    background-color: #ffeb3b;
+  }
+  
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 40px;
+  }
+  
+  footer a {
+    color: #ffcc00;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+  footer a:hover {
+    text-decoration: underline;
+  }
+  

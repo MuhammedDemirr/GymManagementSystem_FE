@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Su Tüketimi</title>
+  <link rel="stylesheet" href="stylewater.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Günlük Su Tüketimi</h1>
+    <div class="water-tracker">
+      <p>Bugün içtiğiniz su miktarı:</p>
+      <h2 id="water-amount">0.0 Litre</h2>
+      <div class="buttons">
+        <button id="decrease-btn">- 500ml</button>
+        <button id="increase-btn">+ 500ml</button>
+      </div>
+    </div>
+    <button id="home-btn" onclick="window.location.href='user.html'">Ana Sayfa</button>
+  </div>
+  <script>
+    let waterAmount = 0;
+
+    document.getElementById('increase-btn').addEventListener('click', function() {
+      waterAmount += 0.5;
+      updateWaterAmount();
+    });
+
+    document.getElementById('decrease-btn').addEventListener('click', function() {
+      if (waterAmount > 0) {
+        waterAmount -= 0.5;
+        updateWaterAmount();
+      }
+    });
+
+    function updateWaterAmount() {
+      document.getElementById('water-amount').textContent = `${waterAmount.toFixed(1)} Litre`;
+    }
+  </script>
+</body>
+</html>

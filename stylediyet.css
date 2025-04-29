@@ -1,0 +1,78 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom right, #5f0fd6, #2196f3);
+    color: white;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+  }
+  
+  header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  header h1 {
+    font-size: 2rem;
+    color: #ffcc00;
+  }
+  
+  header span {
+    font-size: 1rem;
+    color: #ffffffcc;
+  }
+  
+  header p {
+    font-size: 1.2rem;
+    color: #eeeeee;
+    margin-top: 10px;
+  }
+  
+  .program-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .day-plan {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-left: 5px solid #ffee58;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  }
+  
+  .day-plan h2 {
+    margin-top: 0;
+    color: #ffeb3b;
+  }
+  
+  .day-plan ul {
+    padding-left: 20px;
+  }
+  
+  .day-plan li {
+    margin-bottom: 8px;
+    font-size: 1rem;
+  }
+  
+  footer {
+    text-align: center;
+    margin-top: 40px;
+  }
+  
+  footer a {
+    color: #ffcc00;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+  footer a:hover {
+    text-decoration: underline;
+  }
+  

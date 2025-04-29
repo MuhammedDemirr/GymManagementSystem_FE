@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Cüzdan</title>
+  <link rel="stylesheet" href="stylecuzdan.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>E-Cüzdan</h2>
+
+    <div class="wallet-box">
+      <p><strong>Güncel Bakiye:</strong> <span id="balance">0</span> TL</p>
+
+      <label for="amount">Yüklenecek Tutar (TL):</label>
+      <input type="number" id="amount" placeholder="Örn: 100" />
+
+      <button onclick="loadBalance()">Bakiye Yükle</button>
+
+      <p class="success" id="message"></p>
+    </div>
+
+    <footer>
+      <a href="user.html">◀ Ana Sayfa</a>
+    </footer>
+  </div>
+
+  <script>
+    let balance = 0;
+
+    function loadBalance() {
+      const input = document.getElementById("amount");
+      const message = document.getElementById("message");
+      const value = parseFloat(input.value);
+
+      if (isNaN(value) || value <= 0) {
+        message.innerText = "Geçerli bir tutar giriniz.";
+        message.style.color = "#ff4444";
+        return;
+      }
+
+      balance += value;
+      document.getElementById("balance").innerText = balance.toFixed(2);
+      message.innerText = `✔ ${value} TL bakiye eklendi.`;
+      message.style.color = "#00ff99";
+      input.value = "";
+    }
+  </script>
+</body>
+</html>

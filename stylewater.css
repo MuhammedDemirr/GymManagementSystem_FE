@@ -1,0 +1,72 @@
+/* Genel Ayarlar */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #6506ff; /* Daha yumuşak bir arka plan rengi */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Konteyner Stili */
+  .container {
+    text-align: center;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Daha hafif bir gölge */
+  }
+  
+  /* Başlık */
+  h1 {
+    color: #3dffdf; /* Daha koyu bir gri */
+  }
+  
+  /* Su Takip Alanı */
+  .water-tracker {
+    margin-top: 20px;
+  }
+  
+  #water-amount {
+    font-size: 2rem;
+    color: #0056b3; /* Daha koyu bir mavi */
+    margin: 10px 0;
+  }
+  
+  /* Butonlar */
+  .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Artırma Butonu */
+  #increase-btn {
+    background-color: #007bff; /* Mavi ton */
+    color: white;
+  }
+  
+  #increase-btn:hover {
+    background-color: #0056b3; /* Daha koyu mavi */
+  }
+  
+  /* Azaltma Butonu */
+  #decrease-btn {
+    background-color: #ff6f61; /* Yumuşak kırmızı ton */
+    color: white;
+  }
+  
+  #decrease-btn:hover {
+    background-color: #e63946; /* Daha koyu kırmızı */
+  }
