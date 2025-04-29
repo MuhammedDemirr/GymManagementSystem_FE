@@ -1,0 +1,95 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #3b1c90, #6a23c8, #377dfc);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .container {
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #ffd700;
+    margin-bottom: 20px;
+  }
+  
+  .login-box {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px);
+    max-width: 320px;
+    margin: auto;
+  }
+  
+  label {
+    display: block;
+    text-align: left;
+    margin: 10px 0 5px;
+    color: #ffd700;
+    font-weight: bold;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-size: 1em;
+  }
+  
+  .forgot {
+    text-align: right;
+    margin-bottom: 15px;
+  }
+  
+  .forgot a {
+    color: #ffd700;
+    text-decoration: none;
+    font-size: 0.9em;
+  }
+  
+  .login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #ffd700;
+    color: #333;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .admin-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff9966;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9em;
+    cursor: pointer;
+  }
+  
+  .register-link {
+    margin-top: 15px;
+    font-size: 0.95em;
+  }
+  
+  .register-link a {
+    color: #ffd700;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  

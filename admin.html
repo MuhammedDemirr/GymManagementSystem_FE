@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Yönetici Paneli</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #3b1c90, #377dfc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .panel {
+      background: #eef0f5;
+      padding: 30px 40px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    }
+
+    .panel h1 {
+      color: #ffc107;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logout-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #a8b0c0;
+      color: white;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background-color: #3a4a75;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      color: white;
+    }
+
+    .card i {
+      font-size: 40px;
+      margin-bottom: 10px;
+      color: #ffc107;
+    }
+
+    .card a {
+      display: block;
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #66b3ff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <button class="logout-btn" onclick="window.location.href='index.html'">Çıkış Yap</button>
+  <div class="panel">
+    <h1>YÖNETİCİ PANELİ</h1>
+    <div class="grid">
+      <div class="card">
+        <i>👥</i>
+        <h3>Üye Yönetimi</h3>
+        <a href="#">Ekle - Düzenle - Sil</a>
+      </div>
+      <div class="card">
+        <i>👔</i>
+        <h3>Eğitmen ve Çalışan Yönetimi</h3>
+      </div>
+      <div class="card">
+        <i>📅</i>
+        <h3>Randevu Takibi</h3>
+      </div>
+      <div class="card">
+        <i>📈</i>
+        <h3>Ödeme Takibi</h3>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
