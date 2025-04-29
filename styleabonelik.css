@@ -1,0 +1,91 @@
+/* Genel yapı */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom right, #5f0fd6, #2196f3);
+    color: white;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+  }
+  
+  /* Başlık */
+  header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  header h1 {
+    font-size: 2rem;
+    color: #ffcc00;
+    margin: 0;
+  }
+  
+  header span {
+    font-size: 1rem;
+    color: #ffffffcc;
+  }
+  
+  header p {
+    font-size: 1.2rem;
+    color: #eeeeee;
+    margin-top: 10px;
+  }
+  
+  /* Abonelik kutuları */
+  .subscription-box {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-left: 5px solid #ffee58;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+  }
+  
+  .subscription-box:hover {
+    transform: scale(1.02);
+  }
+  
+  .subscription-box h2 {
+    margin-top: 0;
+    color: #ffeb3b;
+    font-size: 1.4rem;
+  }
+  
+  .subscription-box p {
+    margin: 8px 0;
+    font-size: 1rem;
+  }
+  
+  /* Durum renkleri */
+  .active {
+    color: #00e676;
+    font-weight: bold;
+  }
+  
+  .passive {
+    color: #ff5252;
+    font-weight: bold;
+  }
+  
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 40px;
+  }
+  
+  footer a {
+    color: #ffcc00;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+  footer a:hover {
+    text-decoration: underline;
+  }
+  
