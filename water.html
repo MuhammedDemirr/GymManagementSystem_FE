@@ -20,23 +20,77 @@
     <button id="home-btn" onclick="window.location.href='user.html'">Ana Sayfa</button>
   </div>
   <script>
+    const apiUrl = 'http://127.0.0.1:5102/api/Member/SetMemberInfo'; // API URL'sini buraya ekleyin
+    let userId = null; // Kullanıcı ID'si başlangıçta null
     let waterAmount = 0;
 
-    document.getElementById('increase-btn').addEventListener('click', function() {
-      waterAmount += 0.5;
-      updateWaterAmount();
-    });
+    // Kullanıcı bilgilerini API'den al
+    async function fetchUserInfo() {
+      try {
+        // Kullanıcı kimlik doğrulama bilgisi (örneğin token) ile API çağrısı yap
+        const response = await fetch(`${apiUrl}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`, // Token kullanımı
+            'Content-Type': 'application/json',
+          },
+        });
 
-    document.getElementById('decrease-btn').addEventListener('click', function() {
-      if (waterAmount > 0) {
-        waterAmount -= 0.5;
+        if (!response.ok) {
+          throw new Error('Kullanıcı bilgileri alınamadı.');
+        }
+
+        const data = await response.json();
+        userId = data.id; // API'den gelen kullanıcı ID'sini al
+        waterAmount = data.amountOfWater || 0; // API'den gelen amountOfWater bilgisini al
         updateWaterAmount();
+      } catch (error) {
+        console.error('Kullanıcı bilgileri alınırken hata oluştu:', error);
       }
-    });
+    }
 
+    // API'ye su tüketimini güncelle
+    async function updateWaterAmountInApi() {
+      try {
+        await fetch(`${apiUrl}`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`, // Token kullanımı
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: userId, // Dinamik olarak alınan kullanıcı ID'si
+            amountOfWater: waterAmount, // Güncellenen su miktarı
+          }),
+        });
+      } catch (error) {
+        console.error('Su tüketimi güncellenirken hata oluştu:', error);
+      }
+    }
+
+    // Su miktarını güncelle ve ekranda göster
     function updateWaterAmount() {
       document.getElementById('water-amount').textContent = `${waterAmount.toFixed(1)} Litre`;
     }
+
+    // Artırma butonu
+    document.getElementById('increase-btn').addEventListener('click', async function() {
+      waterAmount += 0.5;
+      updateWaterAmount();
+      await updateWaterAmountInApi();
+    });
+
+    // Azaltma butonu
+    document.getElementById('decrease-btn').addEventListener('click', async function() {
+      if (waterAmount > 0) {
+        waterAmount -= 0.5;
+        updateWaterAmount();
+        await updateWaterAmountInApi();
+      }
+    });
+
+    // Sayfa yüklendiğinde kullanıcı bilgilerini al
+    fetchUserInfo();
   </script>
 </body>
 </html>
