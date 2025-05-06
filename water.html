@@ -20,7 +20,7 @@
     <button id="home-btn" onclick="window.location.href='user.html'">Ana Sayfa</button>
   </div>
   <script>
-    const apiUrl = 'http://127.0.0.1:5102/api/Member/SetMemberInfo'; // API URL'sini buraya ekleyin
+    const apiUrl = 'http://127.0.0.1:5102/api/Member'; // API URL'sini buraya ekleyin
     let userId = null; // Kullanıcı ID'si başlangıçta null
     let waterAmount = 0;
 
@@ -52,7 +52,7 @@
     // API'ye su tüketimini güncelle
     async function updateWaterAmountInApi() {
       try {
-        await fetch(`${apiUrl}`, {
+        await fetch(`${apiUrl}/SetMemberInfo`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`, // Token kullanımı
