@@ -5,6 +5,98 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GymManagementSystem Giriş</title>
   <link rel="stylesheet" href="style1.css">
+  <script>
+    async function loginUser() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!email || !password) {
+        alert('Lütfen tüm alanları doldurun.');
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Geçerli bir e-posta adresi girin.');
+        return;
+      }
+
+      try {
+        if (!password || password.length < 3) {
+          alert('Şifre en az 3 karakter olmalıdır.');
+          return;
+        }
+
+        // Giriş API'sini çağır
+        const loginResponse = await fetch('https://localhost:7034/api/LogIn/MemberLogIn', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        let loginData; // loginData'yı dışarıda tanımlayın
+
+        if (loginResponse.ok && loginResponse.headers.get('Content-Type')?.includes('application/json')) {
+          loginData = await loginResponse.json();
+        } else {
+          throw new Error('Beklenmeyen yanıt formatı veya hata durumu');
+        }
+
+        console.log('Giriş API Yanıtı:', loginData);
+
+        if (loginResponse.ok) {
+          // Şifreye göre ID döndüren endpoint'i çağır
+          const userIdResponse = await fetch('https://localhost:7034/api/Manager/GetIdByEmail', {
+            method: 'PUT', // Eğer sunucu GET destekliyorsa bunu değiştirin
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email }),
+          });
+
+          if (userIdResponse.ok) {
+            const contentType = userIdResponse.headers.get('Content-Type');
+            if (contentType && contentType.includes('application/json')) {
+              const userIdData = await userIdResponse.json();
+              console.log('User ID API Yanıtı:', userIdData);
+              // Kullanıcı ID'sini kaydet
+              if (userIdData.success && userIdData.data) {
+                localStorage.setItem('userId', userIdData.data); // Burada undefined olmamalı
+                console.log('Kullanıcı ID localStorage\'a kaydedildi:', userIdData.data);
+              } else {
+                console.error('Kullanıcı ID alınamadı.');
+              }
+              window.location.href = 'user.html';
+            } else {
+              throw new Error('Beklenmeyen yanıt formatı');
+            }
+          } else {
+            const errorData = await userIdResponse.text(); // JSON değilse düz metin olarak al
+            console.error('Hata Detayları:', errorData);
+            throw new Error(`Kullanıcı kimliği alınamadı. Durum: ${userIdResponse.status}`);
+          }
+        } else {
+          alert(loginData.message || 'Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
+        }
+      } catch (error) {
+        console.error('Hata:', error);
+        alert('Bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
+      }
+    }
+
+    function adminLogin() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (email === 'admin@admin' && password === 'admin') {
+        window.location.href = 'admin.html';
+      } else {
+        alert('Yönetici girişi başarısız. Lütfen doğru bilgileri girin.');
+      }
+    }
+  </script>
 </head>
 <body>
   <div class="container">
@@ -20,8 +112,10 @@
         <a href="#">Şifremi unuttum?</a>
       </div>
 
-      <button class="login-btn" onclick="window.location.href='user.html'">Kullanıcı Girişi</button>
-      <button class="admin-btn" onclick="window.location.href='admin.html'">Yönetici Girişi</button>
+      <!-- Kullanıcı Girişi butonunu güncelledik -->
+      <button class="login-btn" onclick="loginUser()">Kullanıcı Girişi</button>
+      <!-- Yönetici Girişi butonunu güncelledik -->
+      <button class="admin-btn" onclick="adminLogin()">Yönetici Girişi</button>
 
       <div class="register-link">
         <p>Hesabın yok mu? <a href="register.html">Kayıt Ol</a></p>

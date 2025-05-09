@@ -20,51 +20,67 @@
     <button id="home-btn" onclick="window.location.href='user.html'">Ana Sayfa</button>
   </div>
   <script>
-    const apiUrl = 'http://127.0.0.1:5102/api/Member'; // API URL'sini buraya ekleyin
-    let userId = null; // Kullanıcı ID'si başlangıçta null
-    let waterAmount = 0;
+    let userId; // Kullanıcı ID'si
+    let waterAmount = 0; // Su miktarı
+
+    const API_BASE_URL = 'https://localhost:7034/api';
+    const GET_WATER_INFO_URL = `${API_BASE_URL}/Manager/GetUniqueMember`;
+    const UPDATE_WATER_URL = `${API_BASE_URL}/Member/EditAmountOfWater`;
 
     // Kullanıcı bilgilerini API'den al
-    async function fetchUserInfo() {
+    async function fetchUserWaterInfo() {
       try {
-        // Kullanıcı kimlik doğrulama bilgisi (örneğin token) ile API çağrısı yap
-        const response = await fetch(`${apiUrl}`, {
-          method: 'GET',
+        userId = localStorage.getItem('userId');
+        if (!userId) {
+          console.error('Kullanıcı ID bulunamadı.');
+          alert('Lütfen giriş yapınız.');
+          window.location.href = 'index.html';
+          return;
+        }
+
+        const response = await fetch(GET_WATER_INFO_URL, {
+          method: 'PUT',
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`, // Token kullanımı
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
           },
+          body: JSON.stringify({ id: userId }), // id'yi body içinde gönderin
         });
 
         if (!response.ok) {
-          throw new Error('Kullanıcı bilgileri alınamadı.');
+          throw new Error(`Kullanıcı su bilgileri alınamadı: ${response.statusText}`);
         }
 
         const data = await response.json();
-        userId = data.id; // API'den gelen kullanıcı ID'sini al
-        waterAmount = data.amountOfWater || 0; // API'den gelen amountOfWater bilgisini al
+        waterAmount = data.amountOfWater || 0;
         updateWaterAmount();
       } catch (error) {
-        console.error('Kullanıcı bilgileri alınırken hata oluştu:', error);
+        console.error('Kullanıcı su bilgileri alınırken hata oluştu:', error);
+        alert('Su bilgileri alınırken bir hata oluştu. Lütfen tekrar deneyiniz.');
       }
     }
 
-    // API'ye su tüketimini güncelle
+    // Kullanıcı bilgilerini API'ye gönder
     async function updateWaterAmountInApi() {
       try {
-        await fetch(`${apiUrl}/SetMemberInfo`, {
-          method: 'POST',
+        const response = await fetch(`${UPDATE_WATER_URL}?id=${userId}`, {
+          method: 'PUT',
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`, // Token kullanımı
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            id: userId, // Dinamik olarak alınan kullanıcı ID'si
-            amountOfWater: waterAmount, // Güncellenen su miktarı
+            id: userId,
+            amountOfWater: waterAmount,
           }),
         });
+
+        if (!response.ok) {
+          throw new Error(`Su tüketimi güncellenemedi: ${response.statusText}`);
+        }
       } catch (error) {
         console.error('Su tüketimi güncellenirken hata oluştu:', error);
+        alert('Su tüketimi güncellenirken bir hata oluştu. Lütfen tekrar deneyiniz.');
       }
     }
 
@@ -74,14 +90,14 @@
     }
 
     // Artırma butonu
-    document.getElementById('increase-btn').addEventListener('click', async function() {
+    document.getElementById('increase-btn').addEventListener('click', async function () {
       waterAmount += 0.5;
       updateWaterAmount();
       await updateWaterAmountInApi();
     });
 
     // Azaltma butonu
-    document.getElementById('decrease-btn').addEventListener('click', async function() {
+    document.getElementById('decrease-btn').addEventListener('click', async function () {
       if (waterAmount > 0) {
         waterAmount -= 0.5;
         updateWaterAmount();
@@ -89,8 +105,17 @@
       }
     });
 
-    // Sayfa yüklendiğinde kullanıcı bilgilerini al
-    fetchUserInfo();
+    // Sayfa yüklendiğinde su miktarını yükle
+    function initializeWaterTracker() {
+      if (!initializeWaterTracker.initialized) {
+        fetchUserWaterInfo();
+        initializeWaterTracker.initialized = true;
+      }
+    }
+    initializeWaterTracker.initialized = false;
+
+    // Sayfa yüklendiğinde başlat
+    initializeWaterTracker();
   </script>
 </body>
 </html>

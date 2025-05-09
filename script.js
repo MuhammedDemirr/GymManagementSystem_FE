@@ -1,5 +1,5 @@
 // API Endpoint'leri
-const BASE_URL = "http://127.0.0.1:5102/api/Member";
+const BASE_URL = "https://localhost:7034/api/LogIn/MemberSignUp";
 
 //const GET_MEMBERS_URL = "http://127.0.0.1:5102/api/Manager/GetAllMembers";
 const POST_MEMBER_URL = BASE_URL;
@@ -29,7 +29,7 @@ document.getElementById("addUserForm").addEventListener("submit", async (e) => {
     if (!res.ok) throw new Error(`API Hatası: ${res.status}`);
 
     document.getElementById("addUserForm").reset();
-    fetchUsers(); // Listeyi güncelle
+    //fetchUsers(); // Listeyi güncelle
   } catch (err) {
     console.error("Kullanıcı eklenemedi:", err.message);
   }

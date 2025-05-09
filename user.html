@@ -9,7 +9,7 @@
 <body>
   <div class="container">
     <header>
-      <h1>GHOST GYM <span>(MUHAMMED DEMİR)</span></h1>
+      <h1>GHOST GYM <span>(<span id="header-user-name">Kullanıcı Adı</span>)</span></h1>
       <p>Salon Doluluk Oranı: <strong>%1</strong> 🧍‍♂️<strong>%1</strong></p>
       <p class="notice">Uygulama Bildirimleriniz açık değil. Açmak için tıklayınız.</p>
     </header>
@@ -17,28 +17,73 @@
     <div class="profile">
       <div class="avatar"></div>
       <div class="info-box">
-        <h2>MUHAMMED DEMİR</h2>
-        <p>Bakiye: <strong>0 TL</strong></p>
-        <p>Gecikmiş Taksit Yok</p>
-        <p>Aktif Aboneliğiniz Çözükmemektedir</p>
+        <h2 id="profile-user-name">Kullanıcı Adı</h2>
+        <p>Bakiye: <strong id="user-balance">0 TL</strong></p>
+        <p id="user-subscription">Aktif Aboneliğiniz Çözükmemektedir</p>
       </div>
     </div>
     
     <div class="grid">
-        <a href="subscribe.html" class="card yellow">Abonelik Detaylarınız</a>
+      <a href="subscribe.html" class="card yellow">Abonelik Detaylarınız</a>
       <a href="training.html" class="card pink">Antrenman</a>
       <a href="appointment.html" class="card green">Randevu Al</a>
       <a href="diet.html" class="card blue">Diyet Programım</a>
       <a href="water.html" class="card orange2">Su Tüketimi</a>
-
     </div>
 
     <footer>
       <a href="#">Ana Sayfa</a>
       <a href="#">Hesabınız</a>
       <a href="help.html">Yardım</a>
-
     </footer>
   </div>
+
+  <script>
+    const userId = localStorage.getItem('userId');
+
+if (!userId) {
+  console.error('Kullanıcı kimliği bulunamadı. Giriş sayfasına yönlendiriliyor...');
+  window.location.href = 'index.html';
+} else {
+  console.log('Kullanıcı Kimliği:', userId);
+
+  // API URL'sini tanımlayın
+  const url = `https://localhost:7034/api/Manager/GetUniqueMember?id=${userId}`;  // Kullanıcı kimliği ile API çağrısı
+
+  // API'yi çağırın
+  fetch(url, {
+    method: 'PUT',  // PUT metodu kullanılıyor
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id: userId }) // API'nin beklediği formatta bir body gönderin
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Kullanıcı bilgileri alınamadı.');
+    }
+    return response.json();
+  })
+  .then(user => {
+  console.log('Kullanıcı Bilgileri:', user);
+  document.getElementById('header-user-name').textContent = user.nameSurname || 'Kullanıcı Adı';
+  document.getElementById('profile-user-name').textContent = user.nameSurname || 'Kullanıcı Adı';
+  document.getElementById('user-balance').textContent = user.balance || '0 TL';
+
+  // Abonelik süresini kontrol et ve güncelle
+  if (user.membershipPeriod && user.membershipPeriod > 0) {
+    document.getElementById('user-subscription').textContent = `Aboneliğiniz ${user.membershipPeriod} gün geçerlidir.`;
+  } else {
+    document.getElementById('user-subscription').textContent = 'Aktif Aboneliğiniz Gözükmemektedir';
+  }
+})
+  .catch(error => {
+    console.error('Hata:', error);
+    alert('Kullanıcı bilgileri alınırken bir hata oluştu. Lütfen tekrar giriş yapın.');
+    window.location.href = 'index.html';
+  });
+}
+
+  </script>
 </body>
 </html>
