@@ -1,12 +1,104 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+  <style>
+    .container {
+      margin-left: 270px;
+      padding: 20px;
+      transition: margin-left 0.3s ease;
+      position: relative;
+      left: 250px; /* Sidebar genişliğinin yarısı kadar */
+    }
+  </style>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GHOST GYM - Üye Paneli</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Sol Menü Stilleri */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100%;
+      background-color: #1a57b1;
+      color: #fff;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      transform: translateX(0);
+      z-index: 1000;
+    }
+
+    .sidebar.closed {
+      transform: translateX(-100%);
+    }
+
+    .sidebar h2 {
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #000000;
+      text-decoration: none;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #ffffff;
+    }
+
+    .container {
+      margin-left: 270px;
+      padding: 20px;
+      transition: margin-left 0.3s ease;
+      position: relative;
+      left: 250px; /* Sidebar genişliğinin yarısı kadar */
+    }
+
+    .sidebar.closed + .container {
+      margin-left: 20px;
+    }
+
+    #toggle-sidebar {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1100;
+      background-color: #1a57b1;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
+  <!-- Menü Butonu -->
+  <button id="toggle-sidebar">☰ Menü</button>
+
+  <!-- Sol Menü -->
+  <div class="sidebar">
+    <h2> * </h2>
+    <a href="setmemberinfo.html">Ölçümleriniz</a>
+    <a href="training.html">Antrenman</a>
+    <a href="appointment.html">Randevu Al</a>
+    <a href="diet.html">Diyet Programım</a>
+    <a href="water.html">Su Tüketimi</a>
+    <a href="pt.html">Eğitmen</a>
+    <a href="#">Ana Sayfa</a>
+    <a href="updatemember.html">Hesabınız</a>
+    <a href="help.html">Yardım</a>
+  </div>
+
+  <!-- İçerik Alanı -->
   <div class="container">
     <header>
       <h1>GHOST GYM <span>(<span id="header-user-name">Kullanıcı Adı</span>)</span></h1>
@@ -24,66 +116,73 @@
     </div>
     
     <div class="grid">
-      <a href="subscribe.html" class="card yellow">Abonelik Detaylarınız</a>
+      <a href="setmemberinfo.html" class="card yellow">Ölçümleriniz</a>
       <a href="training.html" class="card pink">Antrenman</a>
       <a href="appointment.html" class="card green">Randevu Al</a>
       <a href="diet.html" class="card blue">Diyet Programım</a>
       <a href="water.html" class="card orange2">Su Tüketimi</a>
+      <a href="pt.html" class="card black">Eğitmen</a>
     </div>
 
     <footer>
       <a href="#">Ana Sayfa</a>
-      <a href="#">Hesabınız</a>
+      <a href="updatemember.html">Hesabınız</a>
       <a href="help.html">Yardım</a>
     </footer>
   </div>
 
+  <!-- JavaScript: Menü kontrolü ve kullanıcı verisi -->
   <script>
+    // Menü aç/kapat
+    const toggleButton = document.getElementById('toggle-sidebar');
+    const sidebar = document.querySelector('.sidebar');
+
+    toggleButton.addEventListener('click', () => {
+      sidebar.classList.toggle('closed');
+    });
+
+    // Kullanıcı bilgisi çekme
     const userId = localStorage.getItem('userId');
 
-if (!userId) {
-  console.error('Kullanıcı kimliği bulunamadı. Giriş sayfasına yönlendiriliyor...');
-  window.location.href = 'index.html';
-} else {
-  console.log('Kullanıcı Kimliği:', userId);
+    if (!userId) {
+      console.error('Kullanıcı kimliği bulunamadı. Giriş sayfasına yönlendiriliyor...');
+      window.location.href = 'index.html';
+    } else {
+      console.log('Kullanıcı Kimliği:', userId);
 
-  // API URL'sini tanımlayın
-  const url = `https://localhost:7034/api/Manager/GetUniqueMember?id=${userId}`;  // Kullanıcı kimliği ile API çağrısı
+      const url = `https://localhost:7034/api/Manager/GetUniqueMember?id=${userId}`;
 
-  // API'yi çağırın
-  fetch(url, {
-    method: 'PUT',  // PUT metodu kullanılıyor
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ id: userId }) // API'nin beklediği formatta bir body gönderin
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Kullanıcı bilgileri alınamadı.');
+      fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: userId })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Kullanıcı bilgileri alınamadı.');
+        }
+        return response.json();
+      })
+      .then(user => {
+        console.log('Kullanıcı Bilgileri:', user);
+        document.getElementById('header-user-name').textContent = user.nameSurname || 'Kullanıcı Adı';
+        document.getElementById('profile-user-name').textContent = user.nameSurname || 'Kullanıcı Adı';
+        document.getElementById('user-balance').textContent = user.balance || '0 TL';
+
+        if (user.membershipPeriod && user.membershipPeriod > 0) {
+          document.getElementById('user-subscription').textContent = `Aboneliğiniz ${user.membershipPeriod} gün geçerlidir.`;
+        } else {
+          document.getElementById('user-subscription').textContent = 'Aktif Aboneliğiniz Gözükmemektedir';
+        }
+      })
+      .catch(error => {
+        console.error('Hata:', error);
+        alert('Kullanıcı bilgileri alınırken bir hata oluştu. Lütfen tekrar giriş yapın.');
+        window.location.href = 'index.html';
+      });
     }
-    return response.json();
-  })
-  .then(user => {
-  console.log('Kullanıcı Bilgileri:', user);
-  document.getElementById('header-user-name').textContent = user.nameSurname || 'Kullanıcı Adı';
-  document.getElementById('profile-user-name').textContent = user.nameSurname || 'Kullanıcı Adı';
-  document.getElementById('user-balance').textContent = user.balance || '0 TL';
-
-  // Abonelik süresini kontrol et ve güncelle
-  if (user.membershipPeriod && user.membershipPeriod > 0) {
-    document.getElementById('user-subscription').textContent = `Aboneliğiniz ${user.membershipPeriod} gün geçerlidir.`;
-  } else {
-    document.getElementById('user-subscription').textContent = 'Aktif Aboneliğiniz Gözükmemektedir';
-  }
-})
-  .catch(error => {
-    console.error('Hata:', error);
-    alert('Kullanıcı bilgileri alınırken bir hata oluştu. Lütfen tekrar giriş yapın.');
-    window.location.href = 'index.html';
-  });
-}
-
   </script>
 </body>
 </html>
