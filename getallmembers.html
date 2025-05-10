@@ -1,139 +1,188 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Üye Yönetimi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #7b1fa2, #2196f3);
+      min-height: 100vh;
+      padding: 20px;
+      color: #fff;
     }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    h1 {
+      text-align: center;
+      color: #ffc107;
+      margin-bottom: 30px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 10px;
+      overflow: hidden;
+      color: #333;
     }
-    table, th, td {
-      border: 1px solid #ddd;
-    }
+
     th, td {
-      padding: 10px;
-      text-align: left;
+      padding: 12px 15px;
+      text-align: center;
     }
+
     th {
-      background-color: #f4f4f4;
-    }
-    .update-btn {
-      background-color: #4CAF50;
+      background-color: #1976d2;
       color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .update-btn, .delete-btn {
+      padding: 8px 12px;
       border: none;
-      padding: 5px 10px;
+      border-radius: 8px;
       cursor: pointer;
+      font-weight: bold;
     }
+
+    .update-btn {
+      background-color: #4caf50;
+      color: white;
+    }
+
     .update-btn:hover {
-      background-color: #45a049;
+      background-color: #43a047;
     }
+
     .delete-btn {
       background-color: #f44336;
       color: white;
-      border: none;
-      padding: 5px 10px;
-      cursor: pointer;
     }
+
     .delete-btn:hover {
-      background-color: #d32f2f;
+      background-color: #e53935;
+    }
+
+    @media (max-width: 768px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      th {
+        display: none;
+      }
+
+      td {
+        background: white;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        text-align: left;
+        position: relative;
+      }
+
+      td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+        color: #1976d2;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Üye Listesi</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Ad Soyad</th>
-        <th>Email</th>
-        <th>Yaş</th>
-        <th>Kilo</th>
-        <th>Boy</th>
-        <th>Su Miktarı</th>
-        <th>Üyelik Süresi</th>
-        <th>Oluşturulma Tarihi</th>
-        <th>Güncellenme Tarihi</th>
-        <th>İşlemler</th>
-      </tr>
-    </thead>
-    <tbody id="member-list">
-      <!-- Üyeler buraya eklenecek -->
-    </tbody>
-  </table>
+  <div class="container">
+    <h1>Üye Listesi</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Ad Soyad</th>
+          <th>Email</th>
+          <th>Yaş</th>
+          <th>Kilo</th>
+          <th>Boy</th>
+          <th>Su</th>
+          <th>Üyelik</th>
+          <th>Oluşturuldu</th>
+          <th>Güncellendi</th>
+          <th>İşlemler</th>
+        </tr>
+      </thead>
+      <tbody id="member-list">
+        <!-- Üyeler JS ile eklenecek -->
+      </tbody>
+    </table>
+  </div>
 
   <script>
     const GET_MEMBERS_URL = 'https://localhost:7034/api/Manager/GetAllMembers';
     const DELETE_MEMBER_URL = 'https://localhost:7034/api/Manager/DeleteMember';
     const UPDATE_MEMBERSHIP_URL = 'https://localhost:7034/api/Manager/SetMemberShipPeriod';
 
-    // API'den üyeleri al ve tabloya ekle
     async function fetchMembers() {
-  try {
-    const response = await fetch(GET_MEMBERS_URL, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json',
-      },
-    });
+      try {
+        const response = await fetch(GET_MEMBERS_URL, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+          },
+        });
 
-    if (!response.ok) {
-      throw new Error(`Üyeler alınamadı: ${response.statusText}`);
-    }
+        if (!response.ok) throw new Error('Üyeler alınamadı.');
 
-    const result = await response.json();
-    console.log('API Yanıtı:', result);
+        const result = await response.json();
+        const members = result.data || [];
+        const memberList = document.getElementById('member-list');
+        memberList.innerHTML = '';
 
-    // Yanıtın doğru formatta olup olmadığını kontrol et
-    if (!result || typeof result !== 'object' || !Array.isArray(result.data)) {
-      console.error('Beklenmeyen yanıt formatı:', result);
-      throw new Error('API yanıtı beklenen formatta değil. "data" dizisi bulunamadı.');
-    }
-
-    const members = result.data;
-    const memberList = document.getElementById('member-list');
-    memberList.innerHTML = ''; // Önceki verileri temizle
-
-    // Üyeleri tabloya ekle
-    members.forEach(member => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${member.id}</td>
-        <td>${member.nameSurname}</td>
-        <td>${member.email}</td>
-        <td>${member.age}</td>
-        <td>${member.weight}</td>
-        <td>${member.height}</td>
-        <td>${member.amountOfWater}</td>
-        <td>${member.membershipPeriod}</td>
-        <td>${new Date(member.createddate).toLocaleString()}</td>
-        <td>${new Date(member.modifieddate).toLocaleString()}</td>
-        <td>
-          <button class="update-btn" onclick="updateMembership(${member.id})">Gün Ekle</button>
-          <button class="delete-btn" onclick="deleteMember(${member.id})">Sil</button>
-        </td>
-      `;
-      memberList.appendChild(row);
-    });
-  } catch (error) {
-    console.error('Üyeler alınırken hata oluştu:', error);
-    alert('Üyeler alınırken bir hata oluştu. Lütfen tekrar deneyiniz.');
-  }
-}
-
-
-    async function deleteMember(memberId) {
-      if (!confirm('Bu üyeyi silmek istediğinize emin misiniz?')) {
-        return;
+        members.forEach(member => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td data-label="ID">${member.id}</td>
+            <td data-label="Ad Soyad">${member.nameSurname}</td>
+            <td data-label="Email">${member.email}</td>
+            <td data-label="Yaş">${member.age}</td>
+            <td data-label="Kilo">${member.weight}</td>
+            <td data-label="Boy">${member.height}</td>
+            <td data-label="Su Miktarı">${member.amountOfWater}</td>
+            <td data-label="Üyelik Süresi">${member.membershipPeriod}</td>
+            <td data-label="Oluşturuldu">${new Date(member.createddate).toLocaleString()}</td>
+            <td data-label="Güncellendi">${new Date(member.modifieddate).toLocaleString()}</td>
+            <td data-label="İşlemler">
+              <button class="update-btn" onclick="updateMembership(${member.id})">Gün Ekle</button>
+              <button class="delete-btn" onclick="deleteMember(${member.id})">Sil</button>
+            </td>
+          `;
+          memberList.appendChild(row);
+        });
+      } catch (error) {
+        console.error('Hata:', error);
+        alert('Veriler alınamadı.');
       }
+    }
+
+    async function deleteMember(id) {
+      if (!confirm('Üyeyi silmek istiyor musunuz?')) return;
 
       try {
         const response = await fetch(DELETE_MEMBER_URL, {
@@ -142,27 +191,20 @@
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ id: memberId })
+          body: JSON.stringify({ id }),
         });
 
-        if (!response.ok) {
-          throw new Error(`Üye silinemedi: ${response.statusText}`);
-        }
-
-        alert('Üye başarıyla silindi.');
-        fetchMembers(); // Tabloyu yenile
-      } catch (error) {
-        console.error('Üye silinirken hata oluştu:', error);
-        alert('Üye silinirken bir hata oluştu. Lütfen tekrar deneyiniz.');
+        if (!response.ok) throw new Error('Silinemedi');
+        alert('Üye silindi.');
+        fetchMembers();
+      } catch (e) {
+        alert('Silme işlemi başarısız.');
       }
     }
 
-    async function updateMembership(memberId) {
-      const newDuration = prompt('Yeni üyelik süresini (gün) girin:');
-      if (!newDuration || isNaN(newDuration) || newDuration <= 0) {
-        alert('Geçerli bir süre girin.');
-        return;
-      }
+    async function updateMembership(id) {
+      const days = prompt('Yeni üyelik süresi (gün):');
+      if (!days || isNaN(days) || days <= 0) return alert('Geçersiz giriş.');
 
       try {
         const response = await fetch(UPDATE_MEMBERSHIP_URL, {
@@ -171,32 +213,18 @@
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ id: memberId, day: parseInt(newDuration, 10) }),
+          body: JSON.stringify({ id, day: parseInt(days, 10) }),
         });
 
-        const contentType = response.headers.get('Content-Type');
-        if (!response.ok) {
-          const errorData = await response.text();
-          console.error('Hata Detayları:', errorData);
-          throw new Error(`Üyelik süresi güncellenemedi: ${response.statusText}`);
-        }
+        if (!response.ok) throw new Error('Güncellenemedi');
 
-        if (contentType && contentType.includes('application/json')) {
-          const responseData = await response.json();
-          alert(responseData.message || 'Üyelik süresi başarıyla güncellendi.');
-        } else {
-          const responseText = await response.text();
-          alert('Üyelik süresi başarıyla güncellendi.');
-        }
-
-        fetchMembers(); // Tabloyu yenile
-      } catch (error) {
-        console.error('Üyelik süresi güncellenirken hata oluştu:', error);
-        alert('Üyelik süresi güncellenirken bir hata oluştu. Lütfen tekrar deneyiniz.');
+        alert('Üyelik süresi güncellendi.');
+        fetchMembers();
+      } catch (e) {
+        alert('Hata oluştu.');
       }
     }
 
-    // Sayfa yüklendiğinde üyeleri getir
     document.addEventListener('DOMContentLoaded', fetchMembers);
   </script>
 </body>
