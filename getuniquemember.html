@@ -1,111 +1,138 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Member Details</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Üye Bilgisi Getir</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #8e2de2, #4a00e0);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
 
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
+    .card {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+    }
 
-        label {
-            font-size: 1.1rem;
-            color: #555;
-        }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 25px;
+      color: #ffc107;
+    }
 
-        input[type="text"] {
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 300px;
-            font-size: 1rem;
-        }
+    label {
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: 10px;
+    }
 
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
+    input[type="text"] {
+      padding: 12px;
+      width: 100%;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      outline: none;
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+    }
 
-        button:hover {
-            background-color: #0056b3;
-        }
+    button {
+      background-color: #03dac6;
+      color: #000;
+      font-weight: bold;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-        h2 {
-            color: #333;
-            margin-top: 30px;
-        }
+    button:hover {
+      background-color: #00bfa5;
+      transform: scale(1.05);
+    }
 
-        pre {
-            background-color: #e9ecef;
-            padding: 15px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            width: 80%;
-            max-width: 600px;
-            overflow-x: auto;
-            font-size: 0.9rem;
-            color: #333;
-        }
-    </style>
+    h2 {
+      margin-top: 30px;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    pre {
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #333;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 15px;
+      text-align: left;
+      font-size: 0.9rem;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    @media (max-width: 500px) {
+      .card {
+        padding: 30px 20px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Get Member Details</h1>
-    <label for="memberId">Enter Member ID:</label>
-    <input type="text" id="memberId" placeholder="Enter ID">
-    <button id="getMember">Get Member</button>
+  <div class="card">
+    <h1>Üye Bilgisi Getir</h1>
+    <label for="memberId">Üye ID girin:</label>
+    <input type="text" id="memberId" placeholder="Örn: 123">
+    <button id="getMember">Bilgileri Getir</button>
 
-    <h2>Member Details:</h2>
-    <pre id="responseMessage">No data yet.</pre>
+    <h2>Sonuç:</h2>
+    <pre id="responseMessage">Henüz veri yok.</pre>
+  </div>
 
-    <script>
-        document.getElementById('getMember').addEventListener('click', async () => {
-            const id = document.getElementById('memberId').value;
-            const responseMessage = document.getElementById('responseMessage');
+  <script>
+    document.getElementById('getMember').addEventListener('click', async () => {
+      const id = document.getElementById('memberId').value.trim();
+      const responseMessage = document.getElementById('responseMessage');
 
-            if (!id) {
-                responseMessage.textContent = 'Please enter a valid Member ID.';
-                return;
-            }
+      if (!id || isNaN(id)) {
+        responseMessage.textContent = 'Lütfen geçerli bir ID girin.';
+        return;
+      }
 
-            try {
-                const response = await fetch("https://localhost:7034/api/Manager/GetUniqueMember", {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ id: parseInt(id) })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status} - ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                responseMessage.textContent = `Member details: ${JSON.stringify(data, null, 2)}`;
-            } catch (error) {
-                responseMessage.textContent = `Failed to fetch member details: ${error.message}`;
-            }
+      try {
+        const response = await fetch("https://localhost:7034/api/Manager/GetUniqueMember", {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({ id: parseInt(id) })
         });
-    </script>
+
+        if (!response.ok) {
+          throw new Error(`Hata: ${response.status} - ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        responseMessage.textContent = `Üye Bilgisi:\n${JSON.stringify(data, null, 2)}`;
+      } catch (error) {
+        responseMessage.textContent = `Veri alınamadı: ${error.message}`;
+      }
+    });
+  </script>
 </body>
 </html>
