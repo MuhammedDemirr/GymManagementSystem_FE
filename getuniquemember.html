@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Member Details</title>
+    <title>Üye Bilgilerini Getir</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,7 +17,7 @@
             height: 100vh;
         }
 
-        h1 {
+        h1, h2 {
             color: #333;
             margin-bottom: 20px;
         }
@@ -50,32 +50,41 @@
             background-color: #0056b3;
         }
 
-        h2 {
-            color: #333;
+        #responseMessage {
             margin-top: 30px;
-        }
-
-        pre {
-            background-color: #e9ecef;
-            padding: 15px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
             width: 80%;
             max-width: 600px;
-            overflow-x: auto;
-            font-size: 0.9rem;
-            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <h1>Get Member Details</h1>
-    <label for="memberId">Enter Member ID:</label>
-    <input type="text" id="memberId" placeholder="Enter ID">
-    <button id="getMember">Get Member</button>
+    <h1>Üye Bilgilerini Getir</h1>
+    <label for="memberId">Üye ID girin:</label>
+    <input type="text" id="memberId" placeholder="ID girin">
+    <button id="getMember">Getir</button>
 
-    <h2>Member Details:</h2>
-    <pre id="responseMessage">No data yet.</pre>
+    <h2>Üye Bilgileri:</h2>
+    <div id="responseMessage">Henüz veri yok.</div>
 
     <script>
         document.getElementById('getMember').addEventListener('click', async () => {
@@ -83,7 +92,7 @@
             const responseMessage = document.getElementById('responseMessage');
 
             if (!id) {
-                responseMessage.textContent = 'Please enter a valid Member ID.';
+                responseMessage.innerHTML = 'Lütfen geçerli bir Üye ID girin.';
                 return;
             }
 
@@ -97,13 +106,27 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error(`Error: ${response.status} - ${response.statusText}`);
+                    throw new Error(`Hata: ${response.status} - ${response.statusText}`);
                 }
 
                 const data = await response.json();
-                responseMessage.textContent = `Member details: ${JSON.stringify(data, null, 2)}`;
+
+                // Tabloyu oluştur
+                const table = `
+                    <table>
+                        <tr><th>Alan</th><th>Bilgi</th></tr>
+                        <tr><td>ID</td><td>${data.id}</td></tr>
+                        <tr><td>Ad</td><td>${data.nameSurname}</td></tr>
+                        <tr><td>Üyelik Oluşturma Tarihi</td><td>${data.createddate}</td></tr>
+                        <tr><td>Email</td><td>${data.email}</td></tr>
+                        <tr><td>Üyelik Süresi</td><td>${data.membershipPeriod}</td></tr>
+                    </table>
+                `;
+
+                responseMessage.innerHTML = table;
+
             } catch (error) {
-                responseMessage.textContent = `Failed to fetch member details: ${error.message}`;
+                responseMessage.innerHTML = `Üye bilgileri alınamadı: ${error.message}`;
             }
         });
     </script>
