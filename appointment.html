@@ -5,25 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Randevu Al</title>
   <link rel="stylesheet" href="styleappointment.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .field-group {
+      margin-bottom: 20px;
+    }
+    #trainer-section {
+      display: none;
+    }
+    .success, .error {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .success {
+      background-color: #e0ffe0;
+      color: green;
+    }
+    .error {
+      background-color: #ffe0e0;
+      color: red;
+    }
+  </style>
 </head>
 <body>
 
   <div class="container">
     <h2>Randevu Al</h2>
 
-    <label for="date">Tarih Seçiniz:</label>
-    <input type="date" id="date">
+    <div class="field-group">
+      <label for="date">Tarih Seçiniz:</label><br>
+      <input type="date" id="date">
+    </div>
 
-    <div id="trainer-section" style="display: none;">
-      <label for="trainer">Eğitmen Seçiniz:</label>
+    <div class="field-group" id="trainer-section">
+      <label for="trainer">Eğitmen Seçiniz:</label><br>
       <select id="trainer">
+        <option disabled selected>Bir eğitmen seçin</option>
         <option>Ahmet Yılmaz</option>
         <option>Elif Demir</option>
         <option>Mehmet Kaya</option>
       </select>
     </div>
 
-    <button onclick="checkDate()">Devam Et</button>
+    <button id="continue-button" onclick="checkDate()">Devam Et</button>
 
     <div class="error" id="error-message" style="display: none;"></div>
     <div class="success" id="success-message" style="display: none;"></div>
@@ -35,6 +70,7 @@
       const errorDiv = document.getElementById('error-message');
       const successDiv = document.getElementById('success-message');
       const trainerSection = document.getElementById('trainer-section');
+      const button = document.getElementById('continue-button');
 
       errorDiv.style.display = 'none';
       successDiv.style.display = 'none';
@@ -58,17 +94,25 @@
       }
 
       trainerSection.style.display = 'block';
-
       successDiv.innerText = 'Tarih uygun. Eğitmen seçiniz ve tekrar devam edin.';
       successDiv.style.display = 'block';
+      button.innerText = 'Randevuyu Kaydet';
 
-      document.querySelector("button").innerText = "Randevuyu Kaydet";
-      document.querySelector("button").onclick = function () {
+      button.onclick = function () {
+        const trainerValue = document.getElementById('trainer').value;
+        if (!trainerValue || trainerValue === "Bir eğitmen seçin") {
+          errorDiv.innerText = "Lütfen bir eğitmen seçiniz!";
+          errorDiv.style.display = "block";
+          successDiv.style.display = "none";
+          return;
+        }
         successDiv.innerText = "✅ Randevunuz başarıyla kaydedildi.";
-        errorDiv.style.display = 'none';
-        successDiv.style.display = 'block';
-        trainerSection.style.display = 'none';
-      }
+        errorDiv.style.display = "none";
+        successDiv.style.display = "block";
+        trainerSection.style.display = "none";
+        button.innerText = "Devam Et";
+        button.onclick = checkDate;
+      };
     }
   </script>
 

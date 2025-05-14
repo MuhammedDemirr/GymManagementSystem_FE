@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil Bilgileri</title>
+  <link rel="stylesheet" href="pt.css" />
+  <style>
+    .form-card {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .form-card label {
+      text-align: left;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .form-card input {
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .form-card button {
+      margin-top: 10px;
+      padding: 12px;
+      font-size: 1rem;
+      background: #ffb347;
+      color: #333;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .form-card button:hover {
+      background: #ffcc33;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="title">Profil Bilgileri</h1>
+
+  <div class="container">
+    <div class="card">
+      <form class="form-card" id="profileForm">
+        <label for="email">E-posta</label>
+        <input type="email" id="email" value="kullanici@example.com" disabled />
+
+        <label for="password">Şifre</label>
+        <input type="password" id="password" value="123456" disabled />
+
+        <label for="firstName">İsim</label>
+        <input type="text" id="firstName" value="Ali" disabled />
+
+        <label for="lastName">Soyisim</label>
+        <input type="text" id="lastName" value="Veli" disabled />
+
+        <button type="button" id="editBtn" onclick="toggleEdit()">Güncelle</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let isEditing = false;
+
+    function toggleEdit() {
+      const inputs = document.querySelectorAll('#profileForm input');
+      const button = document.getElementById('editBtn');
+
+      if (!isEditing) {
+        inputs.forEach(input => input.disabled = false);
+        button.textContent = 'Kaydet';
+        isEditing = true;
+      } else {
+        inputs.forEach(input => input.disabled = true);
+        button.textContent = 'Güncelle';
+        alert("Bilgiler güncellendi.");
+        // Burada fetch ile backend'e veri gönderilebilir
+        isEditing = false;
+      }
+    }
+  </script>
+
+</body>
+</html>
