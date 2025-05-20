@@ -1,44 +1,85 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fitness Bölümleri</title>
-  <link rel="stylesheet" href="pt.css">
-  <link rel="stylesheet" href="pt.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+  <title>Eğitmen Seçimi</title>
 </head>
 <body>
-  <h1 class="title">Eğitmenler</h1>
-  <div class="container">
- 
-    <div class="card">
-      <a href="trainingchest.html">
-        <img src="photo/pt1.jpg" alt="Göğüs">
-        <h3>Fazlı Derda Yanık</h3>
-      </a>
-    </div>
-    <div class="card">
-      <a href="trainingleg.html">
-        <img src="photo/pt2.jpeg" alt="Bacak">
-        <h3>Ümit Kurt</h3>
-      </a>
-    </div>
-    <div class="card">
-      <a href="trainingshoulder.html">
-        <img src="photo/pt3.jpeg" alt="Omuz">
-        <h3>Sefa Yalçıntaş</h3>
-      </a>
-    </div>
-    <div class="card">
-      <a href="trainingcore.html">
-        <img src="photo/pt4.jpeg" alt="Karın">
-        <h3>Evren Çelik</h3>
-      </a>
-    </div>
-    </div>
-  </div>
+  <h2>Eğitmen Seç</h2>
+  <select id="trainerSelect">
+    <option value="">-- Eğitmen Seçiniz --</option>
+  </select>
+  <button id="chooseBtn">Seçimi Kaydet</button>
+
+  <p id="message"></p>
+
+  <script>
+async function fetchTrainers() {
+  try {
+    const response = await fetch('https://localhost:7034/api/Member/GetAllTrainers');
+    if (!response.ok) throw new Error('Eğitmenler alınamadı');
+    const result = await response.json();
+
+    console.log('API cevabı:', result);
+
+    const trainers = result.data;  // data içinden alıyoruz
+
+    if (!Array.isArray(trainers)) throw new Error('Eğitmenler listesi uygun formatta değil.');
+
+    const select = document.getElementById('trainerSelect');
+    trainers.forEach(trainer => {
+      const option = document.createElement('option');
+      option.value = trainer.nameSurname;
+      option.textContent = trainer.nameSurname;
+      select.appendChild(option);
+    });
+  } catch (error) {
+    document.getElementById('message').textContent = 'Hata: ' + error.message;
+  }
+}
+
+
+    async function chooseTrainer() {
+      const select = document.getElementById('trainerSelect');
+      const selectedTrainer = select.value;
+      const messageEl = document.getElementById('message');
+
+      if (!selectedTrainer) {
+        messageEl.textContent = 'Lütfen bir eğitmen seçin.';
+        return;
+      }
+
+      const appointmentId = localStorage.getItem('userId');
+      if (!appointmentId) {
+        messageEl.textContent = 'Kullanıcı ID bulunamadı localstorageda.';
+        return;
+      }
+
+      const payload = {
+        nameSurname: selectedTrainer,
+        appointmentId: parseInt(appointmentId, 10)
+      };
+
+      try {
+        const response = await fetch('https://localhost:7034/api/Member/ChooseTrainer', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error('Seçim kaydedilemedi.');
+
+        messageEl.textContent = 'Eğitmen seçiminiz başarıyla kaydedildi!';
+      } catch (error) {
+        messageEl.textContent = 'Hata: ' + error.message;
+      }
+    }
+
+    document.getElementById('chooseBtn').addEventListener('click', chooseTrainer);
+
+    fetchTrainers();
+  </script>
 </body>
 </html>

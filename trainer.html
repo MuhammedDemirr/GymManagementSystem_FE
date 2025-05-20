@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Eğitmen Yönetimi</title>
+  <style>
+    /* Genel sayfa ayarları */
+    body {
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Başlıklar */
+    h1 {
+      margin-bottom: 12px;
+      font-weight: 700;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+    }
+
+    /* Form genel */
+    form {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 20px 25px;
+      margin-bottom: 30px;
+      width: 320px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    /* Label ve input */
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      margin-bottom: 18px;
+      box-sizing: border-box;
+      font-weight: 500;
+      transition: box-shadow 0.3s ease;
+    }
+
+    /* Input odaklanınca */
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      box-shadow: 0 0 8px 2px #a5b4fc;
+    }
+
+    /* Buton */
+    button {
+      width: 100%;
+      background: #4f46e5;
+      border: none;
+      padding: 12px 0;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.6);
+    }
+
+    button:hover {
+      background-color: #6366f1;
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.8);
+    }
+
+    /* Eğitmenler listesi */
+    #trainersList {
+      list-style: none;
+      padding: 0;
+      width: 320px;
+      margin-bottom: 25px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    #trainersList li {
+      padding: 10px 15px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #trainersList li:last-child {
+      border-bottom: none;
+    }
+
+    /* Sonuç mesajı */
+    #result {
+      width: 320px;
+      text-align: center;
+      padding: 15px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.25);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      font-size: 1.1rem;
+      user-select: none;
+      min-height: 1.5em;
+    }
+
+    /* Sil butonu listede */
+    .delete-btn {
+      background-color: #dc2626;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    .delete-btn:hover {
+      background-color: #b91c1c;
+    }
+
+    /* Responsive */
+    @media (max-width: 400px) {
+      form, #trainersList, #result {
+        width: 90vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Eğitmen Oluştur</h1>
+  <form id="createTrainerForm">
+    <label for="nameSurname">Ad Soyad:</label>
+    <input type="text" id="nameSurname" name="nameSurname" required />
+    <button type="submit">Oluştur</button>
+  </form>
+
+  <h1>Eğitmenler Listesi</h1>
+  <ul id="trainersList"></ul>
+
+  <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
+
+  <script>
+    const createForm = document.getElementById('createTrainerForm');
+    const resultDiv = document.getElementById('result');
+    const trainersList = document.getElementById('trainersList');
+
+    async function fetchTrainers() {
+      try {
+        const response = await fetch('https://localhost:7034/api/Member/GetAllTrainers');
+        if (!response.ok) throw new Error('Liste alınamadı: ' + response.status);
+
+        const responseData = await response.json();
+
+        if (!responseData.success) {
+          throw new Error(responseData.message || 'API başarısız döndü');
+        }
+
+        const trainers = responseData.data;
+
+        trainersList.innerHTML = '';
+        if (!trainers || trainers.length === 0) {
+          trainersList.innerHTML = '<li>Hiç eğitmen yok</li>';
+          return;
+        }
+
+        trainers.forEach(trainer => {
+          const li = document.createElement('li');
+
+          const textSpan = document.createElement('span');
+          textSpan.textContent = `ID: ${trainer.id} - Ad Soyad: ${trainer.nameSurname}`;
+
+          const deleteBtn = document.createElement('button');
+          deleteBtn.textContent = 'Sil';
+          deleteBtn.classList.add('delete-btn');
+
+          deleteBtn.addEventListener('click', async () => {
+            if (!confirm(`"${trainer.nameSurname}" isimli eğitmeni silmek istediğinize emin misiniz?`)) {
+              return;
+            }
+            try {
+              const response = await fetch('https://localhost:7034/api/Manager/DeleteTrainer', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ Id: trainer.id })
+              });
+
+              if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error('Silme başarısız: ' + errorText);
+              }
+
+              const responseData = await response.json();
+
+              if (!responseData.success) {
+                throw new Error(responseData.message || 'Eğitmen silinemedi');
+              }
+
+              resultDiv.textContent = 'Eğitmen başarıyla silindi.';
+              fetchTrainers();
+            } catch (error) {
+              console.error(error);
+              resultDiv.textContent = 'Hata: ' + error.message;
+            }
+          });
+
+          li.appendChild(textSpan);
+          li.appendChild(deleteBtn);
+
+          trainersList.appendChild(li);
+        });
+      } catch (error) {
+        console.error(error);
+        trainersList.innerHTML = `<li>Liste alınırken hata oluştu: ${error.message}</li>`;
+      }
+    }
+
+    createForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nameSurname = document.getElementById('nameSurname').value.trim();
+
+      if (!nameSurname) {
+        resultDiv.textContent = 'Ad Soyad boş olamaz.';
+        return;
+      }
+
+      try {
+        const response = await fetch('https://localhost:7034/api/Manager/CreateTrainer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nameSurname })
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error('Oluşturma başarısız: ' + errorText);
+        }
+
+        const responseData = await response.json();
+
+        if (!responseData.success) {
+          throw new Error(responseData.message || 'Eğitmen oluşturulamadı');
+        }
+
+        resultDiv.textContent = 'Eğitmen başarıyla oluşturuldu.';
+        createForm.reset();
+        fetchTrainers();
+      } catch (error) {
+        console.error(error);
+        resultDiv.textContent = 'Hata: ' + error.message;
+      }
+    });
+
+    window.addEventListener('load', fetchTrainers);
+  </script>
+</body>
+</html>

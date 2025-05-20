@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Randevu Görüntüleme</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, button { padding: 8px; margin: 5px 0; }
+    .appointment { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+    table {
+      border-collapse: collapse;
+      margin-top: 10px;
+      width: 100%;
+      max-width: 600px;
+    }
+    th, td {
+      border: 1px solid #666;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+      width: 150px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Tüm Randevuları Görüntüle</h2>
+  <button onclick="getAllAppointments()">Tüm Randevuları Getir</button>
+  <div id="allAppointments"></div>
+
+  <hr>
+
+  <h2>ID’ye Göre Randevu Görüntüle</h2>
+  <input type="number" id="appointmentId" placeholder="Randevu ID girin" />
+  <button onclick="getAppointmentById()">Randevuyu Getir</button>
+  <div id="appointmentById"></div>
+
+  <script>
+    // Tarih formatlayıcı fonksiyon
+    function formatDate(dateStr) {
+      const dateObj = new Date(dateStr);
+      const date = dateObj.toLocaleDateString('tr-TR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+      const time = dateObj.toLocaleTimeString('tr-TR', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      return `${date} ${time}`;
+    }
+
+    // Tüm randevuları tablo halinde göster
+    async function getAllAppointments() {
+      try {
+        const response = await fetch('https://localhost:7034/api/Manager/GetAllAppointments');
+        const result = await response.json();
+        const appointments = result.data;
+
+        const container = document.getElementById('allAppointments');
+        container.innerHTML = '';
+
+        if (Array.isArray(appointments) && appointments.length > 0) {
+          let tableHTML = `<table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tarih</th>
+                <th>Durum</th>
+                <th>Üye ID'si</th>
+              </tr>
+            </thead>
+            <tbody>`;
+
+          appointments.forEach(app => {
+            tableHTML += `
+              <tr>
+                <td>${app.id}</td>
+                <td>${formatDate(app.date)}</td>
+                <td>${app.status ? "Aktif" : "Dolu"}</td>
+                <td>${app.memberId}</td>
+              </tr>
+            `;
+          });
+
+          tableHTML += `</tbody></table>`;
+          container.innerHTML = tableHTML;
+        } else {
+          container.innerHTML = `<div>Hiç randevu bulunamadı.</div>`;
+        }
+
+      } catch (error) {
+        console.error(error);
+        alert("Tüm randevular getirilirken bir hata oluştu.");
+      }
+    }
+
+    // ID'ye göre randevu detayını tablo olarak göster
+    async function getAppointmentById() {
+      const id = document.getElementById('appointmentId').value;
+      if (!id) return alert("Lütfen bir ID girin.");
+
+      try {
+        const response = await fetch('https://localhost:7034/api/Manager/GetAppointmentById', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id: parseInt(id) })
+        });
+
+        const result = await response.json();
+        const appointment = result.data;
+
+        const container = document.getElementById('appointmentById');
+        container.innerHTML = '';
+
+        if (result.success && appointment) {
+          container.innerHTML = `
+            <table>
+              <tr><th>ID</th><td>${appointment.id}</td></tr>
+              <tr><th>Tarih</th><td>${formatDate(appointment.date)}</td></tr>
+              <tr><th>Durum</th><td>${appointment.status ? "Aktif" : "Dolu"}</td></tr>
+              <tr><th>Üye ID'si</th><td>${appointment.memberId}</td></tr>
+            </table>
+          `;
+        } else {
+          container.innerHTML = `<div>Randevu bulunamadı: ${result.message || "Bilinmeyen hata"}</div>`;
+        }
+
+      } catch (error) {
+        console.error(error);
+        alert("Randevu getirilirken bir hata oluştu.");
+      }
+    }
+  </script>
+
+</body>
+</html>

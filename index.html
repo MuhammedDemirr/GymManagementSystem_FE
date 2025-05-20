@@ -37,7 +37,7 @@
         });
 
         let loginData; // loginData'yı dışarıda tanımlayın
-
+5
         if (loginResponse.ok && loginResponse.headers.get('Content-Type')?.includes('application/json')) {
           loginData = await loginResponse.json();
         } else {

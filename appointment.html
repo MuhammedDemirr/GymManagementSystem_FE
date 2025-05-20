@@ -1,120 +1,218 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Randevu Al</title>
-  <link rel="stylesheet" href="styleappointment.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    .container {
-      max-width: 400px;
-      margin: auto;
-      border: 1px solid #ccc;
-      padding: 20px;
-      border-radius: 8px;
-    }
-    .field-group {
-      margin-bottom: 20px;
-    }
-    #trainer-section {
-      display: none;
-    }
-    .success, .error {
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 5px;
-    }
-    .success {
-      background-color: #e0ffe0;
-      color: green;
-    }
-    .error {
-      background-color: #ffe0e0;
-      color: red;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .container { max-width: 400px; margin: auto; border: 1px solid #ccc; padding: 20px; border-radius: 8px; }
+    .field-group { margin-bottom: 20px; }
+    .success, .error { margin-top: 10px; padding: 10px; border-radius: 5px; }
+    .success { background-color: #e0ffe0; color: green; }
+    .error { background-color: #ffe0e0; color: red; }
+    #appointments-list { margin-top: 20px; }
+    button { margin-top: 5px; }
+    select { margin-top: 5px; }
   </style>
 </head>
 <body>
-
   <div class="container">
     <h2>Randevu Al</h2>
-
     <div class="field-group">
       <label for="date">Tarih Seçiniz:</label><br>
-      <input type="date" id="date">
+      <input type="date" id="date" />
     </div>
-
-    <div class="field-group" id="trainer-section">
-      <label for="trainer">Eğitmen Seçiniz:</label><br>
-      <select id="trainer">
-        <option disabled selected>Bir eğitmen seçin</option>
-        <option>Ahmet Yılmaz</option>
-        <option>Elif Demir</option>
-        <option>Mehmet Kaya</option>
-      </select>
-    </div>
-
-    <button id="continue-button" onclick="checkDate()">Devam Et</button>
-
-    <div class="error" id="error-message" style="display: none;"></div>
-    <div class="success" id="success-message" style="display: none;"></div>
+    <button type="button" onclick="createAppointment()">Randevuyu Kaydet</button>
+    <button type="button" onclick="loadUserAppointments()" style="margin-left: 10px;">Randevularımı Görüntüle</button>
+    <div class="error" id="error-message" style="display:none;"></div>
+    <div class="success" id="success-message" style="display:none;"></div>
+    <ul id="appointments-list" style="display:none;"></ul>
   </div>
 
-  <script>
-    function checkDate() {
-      const dateInput = document.getElementById('date').value;
-      const errorDiv = document.getElementById('error-message');
-      const successDiv = document.getElementById('success-message');
-      const trainerSection = document.getElementById('trainer-section');
-      const button = document.getElementById('continue-button');
+<script>
+let trainers = [];
 
-      errorDiv.style.display = 'none';
-      successDiv.style.display = 'none';
+async function fetchTrainers() {
+  if (trainers.length > 0) return trainers;
+  const response = await fetch('https://localhost:7034/api/Member/GetAllTrainers');
+  const data = await response.json();
+  trainers = Array.isArray(data) ? data : data.data || [];
+  return trainers;
+}
 
-      if (!dateInput) {
-        errorDiv.innerText = 'Lütfen bir tarih seçiniz!';
-        errorDiv.style.display = 'block';
-        trainerSection.style.display = 'none';
-        return;
-      }
+async function getBusyTrainerNamesByDate(dateStr) {
+  try {
+    const response = await fetch(`https://localhost:7034/api/Member/GetAppointmentsByDate?date=${encodeURIComponent(dateStr)}`);
+    const data = await response.json();
+    const appointments = Array.isArray(data) ? data : data.data || [];
+    return appointments.map(app => app.trainerName || app.TrainerName).filter(Boolean);
+  } catch (err) {
+    console.error('Hata:', err);
+    return [];
+  }
+}
 
-      const selectedDate = new Date(dateInput);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+function createAppointment() {
+  const dateInput = document.getElementById('date').value;
+  const errorDiv = document.getElementById('error-message');
+  const successDiv = document.getElementById('success-message');
+  errorDiv.style.display = 'none';
+  successDiv.style.display = 'none';
 
-      if (selectedDate < today) {
-        errorDiv.innerText = 'Geçmiş bir tarih seçilemez!';
-        errorDiv.style.display = 'block';
-        trainerSection.style.display = 'none';
-        return;
-      }
+  if (!dateInput) {
+    errorDiv.innerText = 'Lütfen bir tarih seçiniz!';
+    errorDiv.style.display = 'block';
+    return;
+  }
 
-      trainerSection.style.display = 'block';
-      successDiv.innerText = 'Tarih uygun. Eğitmen seçiniz ve tekrar devam edin.';
-      successDiv.style.display = 'block';
-      button.innerText = 'Randevuyu Kaydet';
+  const [year, month, day] = dateInput.split('-');
+  const selectedDate = new Date(Date.UTC(year, month - 1, day));
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
 
-      button.onclick = function () {
-        const trainerValue = document.getElementById('trainer').value;
-        if (!trainerValue || trainerValue === "Bir eğitmen seçin") {
-          errorDiv.innerText = "Lütfen bir eğitmen seçiniz!";
-          errorDiv.style.display = "block";
-          successDiv.style.display = "none";
-          return;
-        }
-        successDiv.innerText = "✅ Randevunuz başarıyla kaydedildi.";
-        errorDiv.style.display = "none";
-        successDiv.style.display = "block";
-        trainerSection.style.display = "none";
-        button.innerText = "Devam Et";
-        button.onclick = checkDate;
-      };
-    }
-  </script>
+  if (selectedDate < today) {
+    errorDiv.innerText = 'Geçmiş bir tarih seçilemez!';
+    errorDiv.style.display = 'block';
+    return;
+  }
 
+  const userId = localStorage.getItem('userId');
+  if (!userId || isNaN(parseInt(userId))) {
+    errorDiv.innerText = 'Kullanıcı ID bulunamadı! Lütfen giriş yapınız.';
+    errorDiv.style.display = 'block';
+    return;
+  }
+
+  const appointment = {
+    Date: selectedDate.toISOString(),
+    Status: true,
+    MemberId: parseInt(userId)
+  };
+
+  fetch('https://localhost:7034/api/Member/CreateAppointment', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(appointment)
+  })
+  .then(res => res.json())
+  .then(data => {
+    successDiv.innerText = '✅ Randevunuz başarıyla kaydedildi.';
+    successDiv.style.display = 'block';
+    document.getElementById('date').value = '';
+  })
+  .catch(error => {
+    errorDiv.innerText = 'Randevu oluşturulamadı: ' + error.message;
+    errorDiv.style.display = 'block';
+  });
+}
+
+async function loadUserAppointments() {
+  const errorDiv = document.getElementById('error-message');
+  const successDiv = document.getElementById('success-message');
+  const list = document.getElementById('appointments-list');
+  errorDiv.style.display = 'none';
+  successDiv.style.display = 'none';
+  list.style.display = 'block';
+  list.innerHTML = '<li>Yükleniyor...</li>';
+
+  const userId = localStorage.getItem('userId');
+  if (!userId) {
+    errorDiv.innerText = 'Kullanıcı giriş yapmamış!';
+    errorDiv.style.display = 'block';
+    list.style.display = 'none';
+    return;
+  }
+
+  const response = await fetch('https://localhost:7034/api/Member/GetAllAppointmentsById', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: parseInt(userId) })
+  });
+  const data = await response.json();
+  let appointments = Array.isArray(data) ? data : data.data || [];
+  const allTrainers = await fetchTrainers();
+
+  list.innerHTML = '';
+  for (const app of appointments) {
+    const dateObj = new Date(app.date || app.Date);
+    const dateStr = dateObj.toISOString().split('T')[0];
+    const busyTrainers = await getBusyTrainerNamesByDate(dateStr);
+    const selectedTrainerName = app.trainerName || app.TrainerName || '';
+
+    const trainerOptions = allTrainers.map(t => {
+      const isBusy = busyTrainers.includes(t.nameSurname);
+      const isSelected = t.nameSurname === selectedTrainerName;
+      const disabled = isBusy && !isSelected ? 'disabled' : '';
+      const label = isBusy && !isSelected ? `${t.nameSurname} (Dolu)` : t.nameSurname;
+      return `<option value="${t.nameSurname}" ${isSelected ? 'selected' : ''} ${disabled}>${label}</option>`;
+    }).join('');
+
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <strong>Tarih:</strong> ${dateObj.toLocaleDateString('tr-TR')}<br>
+      <strong>Durum:</strong> ${app.status ? 'Onaylandı' : 'Dolu'}<br>
+      <label for="trainer-select-${app.id}">Eğitmen Seç:</label><br>
+      <select id="trainer-select-${app.id}" onchange="chooseTrainer('${app.id}', this.value)">
+        <option value="">-- Eğitmen Seçiniz --</option>
+        ${trainerOptions}
+      </select>
+      <br>
+      <button onclick="deleteAppointment(${app.id})">Sil</button>
+      <div id="trainer-msg-${app.id}" style="margin-top:5px; font-weight: bold;"></div>
+    `;
+    list.appendChild(li);
+  }
+}
+
+async function chooseTrainer(appointmentId, nameSurname) {
+  const msgDiv = document.getElementById(`trainer-msg-${appointmentId}`);
+  msgDiv.style.color = 'black';
+  msgDiv.innerText = 'Kaydediliyor...';
+
+  if (!nameSurname) {
+    msgDiv.style.color = 'red';
+    msgDiv.innerText = 'Lütfen bir eğitmen seçin.';
+    return;
+  }
+
+  try {
+    const response = await fetch('https://localhost:7034/api/Member/ChooseTrainer', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nameSurname: nameSurname, appointmentId: parseInt(appointmentId) })
+    });
+
+    if (!response.ok) throw new Error('Sunucu hatası: ' + response.status);
+
+    msgDiv.style.color = 'green';
+    msgDiv.innerText = 'Eğitmen başarıyla seçildi.';
+  } catch (error) {
+    msgDiv.style.color = 'red';
+    msgDiv.innerText = 'Eğitmen seçilemedi: ' + error.message;
+  }
+}
+
+function deleteAppointment(appointmentId) {
+  const userId = localStorage.getItem('userId');
+  if (!userId) {
+    alert('Kullanıcı giriş yapmamış!');
+    return;
+  }
+  const body = { Id: appointmentId, MemberId: parseInt(userId) };
+
+  fetch('https://localhost:7034/api/Member/DeleteAppointment', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  })
+  .then(response => {
+    if (!response.ok) throw new Error('Silme işlemi başarısız oldu.');
+    alert('Randevu silindi.');
+    loadUserAppointments();
+  })
+  .catch(err => alert('Hata: ' + err.message));
+}
+</script>
 </body>
 </html>
