@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(to bottom right, #6a00f4, #1c9eff);
+    background: linear-gradient(to bottom right, #232946);
     color: #fff;
   }
   
@@ -9,6 +9,7 @@ body {
     padding: 20px;
     max-width: 960px;
     margin: auto;
+    background: #rgba(30,34,90,0.85);
   }
   
   header h1 {
