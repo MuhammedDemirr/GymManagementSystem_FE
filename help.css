@@ -1,14 +1,18 @@
 body {
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(to bottom right, #5f0fd6, #2196f3);
-    color: white;
+    font-family: 'Segoe UI', 'Rubik', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #232526 0%, #414345 100%);
+    color: #ffb347; /* Turuncuya yakın metalik renk */
   }
   
   .container {
     max-width: 800px;
     margin: 30px auto;
     padding: 20px;
+    background: rgba(40, 44, 52, 0.92);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+    backdrop-filter: blur(8px);
   }
   
   /* Başlık */
@@ -19,48 +23,52 @@ body {
   
   header h1 {
     font-size: 2rem;
-    color: #ffcc00;
+    background: linear-gradient(to right, #ffb347, #ffcc70, #ff8008);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 5px;
   }
   
   header span {
     font-size: 1rem;
-    color: #ffffffcc;
+    color: #ffe0b2;
   }
   
   header p {
     font-size: 1.2rem;
     margin-top: 10px;
-    color: #eeeeee;
+    color: #ffe0b2;
   }
   
   /* SSS Bölümü */
   .faq {
-    background-color: rgba(255, 255, 255, 0.06);
-    border-left: 5px solid #ffee58;
+    background-color: rgba(255, 179, 71, 0.08);
+    border-left: 5px solid #ffb347;
     border-radius: 15px;
     padding: 20px;
     margin-bottom: 30px;
   }
   
   .faq h2 {
-    color: #ffeb3b;
+    color: #ffb347;
     margin-top: 0;
   }
   
   .question {
     margin-bottom: 15px;
+    color: #ffe0b2;
   }
   
   /* Geri Bildirim */
   .feedback {
-    background-color: rgba(255, 255, 255, 0.06);
-    border-left: 5px solid #4caf50;
+    background-color: rgba(255, 179, 71, 0.08);
+    border-left: 5px solid #ffcc70;
     border-radius: 15px;
     padding: 20px;
   }
   
   .feedback h2 {
-    color: #8bc34a;
+    color: #ffcc70;
     margin-top: 0;
   }
   
@@ -76,6 +84,15 @@ body {
     border-radius: 8px;
     font-size: 1rem;
     outline: none;
+    background: #232526;
+    color: #ffb347;
+    border: 1px solid #ffb34733;
+  }
+  
+  input:focus, textarea:focus {
+    outline: 2px solid #ffb347;
+    background: #232526;
+    color: #ffcc70;
   }
   
   textarea {
@@ -83,18 +100,19 @@ body {
   }
   
   button {
-    background-color: #ffcc00;
-    color: black;
+    background: linear-gradient(90deg, #ffb347, #ffcc70, #ff8008);
+    color: #232526;
     border: none;
     padding: 10px 20px;
     font-size: 1rem;
     border-radius: 8px;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: background 0.2s, color 0.2s;
   }
   
   button:hover {
-    background-color: #ffeb3b;
+    background: linear-gradient(90deg, #ffcc70, #ffb347, #ff8008);
+    color: #232526;
   }
   
   /* Footer */
@@ -104,7 +122,7 @@ body {
   }
   
   footer a {
-    color: #ffcc00;
+    color: #ffb347;
     text-decoration: none;
     font-weight: bold;
     font-size: 1.1rem;
@@ -113,4 +131,3 @@ body {
   footer a:hover {
     text-decoration: underline;
   }
-  

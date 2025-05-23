@@ -4,39 +4,128 @@
   <meta charset="UTF-8" />
   <title>Randevu Görüntüleme</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    input, button { padding: 8px; margin: 5px 0; }
-    .appointment { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+    body {
+      font-family: 'Rubik', Arial, sans-serif;
+      background: linear-gradient(135deg, #232526 0%, #414345 100%);
+      color: #ffb347;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    h2 {
+      margin-top: 40px;
+      margin-bottom: 18px;
+      font-size: 2rem;
+      background: linear-gradient(to right, #ffb347, #ffcc70, #ff8008);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: #ffb347;
+      text-align: center;
+    }
+    .container {
+      background: rgba(40, 44, 52, 0.92);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+      backdrop-filter: blur(8px);
+      padding: 32px 28px;
+      margin: 30px 0;
+      width: 100%;
+      max-width: 650px;
+    }
+    input, button {
+      padding: 10px 14px;
+      margin: 7px 0;
+      border-radius: 10px;
+      border: none;
+      font-size: 1rem;
+      background: #232526;
+      color: #ffb347;
+      border: 1px solid #ffb34733;
+      transition: border 0.2s, background 0.2s, color 0.2s;
+    }
+    input:focus {
+      outline: 2px solid #ffb347;
+      background: #232526;
+      color: #ffcc70;
+    }
+    button {
+      background: linear-gradient(90deg, #ffb347, #ffcc70, #ff8008);
+      color: #232526;
+      font-weight: bold;
+      cursor: pointer;
+      margin-left: 8px;
+      transition: background 0.3s, color 0.3s;
+      box-shadow: 0 2px 12px rgba(255,179,71,0.15);
+    }
+    button:hover {
+      background: linear-gradient(90deg, #ffcc70, #ffb347, #ff8008);
+      color: #232526;
+    }
+    .appointment {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(255,179,71,0.08);
+      border: 1px solid #ffb34733;
+      color: #ffe0b2;
+    }
     table {
       border-collapse: collapse;
       margin-top: 10px;
       width: 100%;
       max-width: 600px;
+      background: rgba(40, 44, 52, 0.92);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
     th, td {
-      border: 1px solid #666;
-      padding: 8px;
+      border: 1px solid #ffb34733;
+      padding: 10px 12px;
       text-align: left;
+      color: #ffe0b2;
     }
     th {
-      background-color: #f0f0f0;
-      width: 150px;
+      background: linear-gradient(to right, #ffb347, #ffcc70, #ff8008);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: #ffb347;
+      font-weight: bold;
+      font-size: 1.08rem;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #ffb34733;
+      margin: 40px 0 30px 0;
+      width: 100%;
+      max-width: 650px;
+    }
+    @media (max-width: 700px) {
+      .container, table {
+        max-width: 98vw;
+        padding: 12px 4vw;
+      }
+      h2 {
+        font-size: 1.3rem;
+      }
     }
   </style>
 </head>
 <body>
-
-  <h2>Tüm Randevuları Görüntüle</h2>
-  <button onclick="getAllAppointments()">Tüm Randevuları Getir</button>
-  <div id="allAppointments"></div>
-
-  <hr>
-
-  <h2>ID’ye Göre Randevu Görüntüle</h2>
-  <input type="number" id="appointmentId" placeholder="Randevu ID girin" />
-  <button onclick="getAppointmentById()">Randevuyu Getir</button>
-  <div id="appointmentById"></div>
-
+  <div class="container">
+    <h2>Tüm Randevuları Görüntüle</h2>
+    <button onclick="getAllAppointments()">Tüm Randevuları Getir</button>
+    <div id="allAppointments"></div>
+    <hr>
+    <h2>ID’ye Göre Randevu Görüntüle</h2>
+    <input type="number" id="appointmentId" placeholder="Randevu ID girin" />
+    <button onclick="getAppointmentById()">Randevuyu Getir</button>
+    <div id="appointmentById"></div>
+  </div>
   <script>
     // Tarih formatlayıcı fonksiyon
     function formatDate(dateStr) {
