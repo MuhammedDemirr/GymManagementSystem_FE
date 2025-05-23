@@ -2,33 +2,26 @@
 <html lang="tr">
 <head>
   <style>
-    .container {
-      margin-left: 270px;
-      padding: 20px;
-      transition: margin-left 0.3s ease;
-      position: relative;
-      left: 250px; /* Sidebar genişliğinin yarısı kadar */
-    }
-  </style>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GHOST GYM - Üye Paneli</title>
-  <link rel="stylesheet" href="styleuser.css" />
-  <style>
-    /* Sol Menü Stilleri */
+    /* Sidebar (Sol Menü) Teması */
     .sidebar {
       position: fixed;
       top: 0;
       left: 0;
       width: 250px;
       height: 100%;
-      background-color: #1a57b1;
-      color: #fff;
-      padding: 20px;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(135deg, #232526 0%, #414345 100%);
+      color: #ffb347;
+      padding: 28px 20px 20px 20px;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.18);
       transition: transform 0.3s ease;
       transform: translateX(0);
       z-index: 1000;
+      border-top-right-radius: 20px;
+      border-bottom-right-radius: 20px;
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .sidebar.closed {
@@ -36,51 +29,112 @@
     }
 
     .sidebar h2 {
-      color: #fff;
-      margin-bottom: 20px;
+      color: #ffb347;
+      margin-bottom: 28px;
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+      background: linear-gradient(to right, #ffb347, #ffcc70, #ff8008);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .sidebar a {
       display: block;
-      color: #000000;
+      color: #ffb347;
+      background: rgba(255,179,71,0.07);
       text-decoration: none;
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 5px;
-      transition: background-color 0.3s;
+      margin: 0 0 8px 0;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-weight: 500;
+      font-size: 1.05rem;
+      transition: background 0.2s, color 0.2s;
+      border: 1px solid transparent;
     }
 
-    .sidebar a:hover {
-      background-color: #ffffff;
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: linear-gradient(90deg, #ffb347, #ffcc70, #ff8008);
+      color: #232526;
+      border: 1px solid #ffb347;
     }
 
-    .container {
-      margin-left: 270px;
-      padding: 20px;
-      transition: margin-left 0.3s ease;
-      position: relative;
-      left: 250px; /* Sidebar genişliğinin yarısı kadar */
-    }
-
-    .sidebar.closed + .container {
-      margin-left: 20px;
-    }
-
+    /* Menü butonu */
     #toggle-sidebar {
       position: fixed;
       top: 20px;
       left: 20px;
       z-index: 1100;
-      background-color: #1a57b1;
-      color: white;
+      background: linear-gradient(135deg, #232526 0%, #414345 100%);
+      color: #ffb347;
       border: none;
       padding: 10px 15px;
       cursor: pointer;
-      border-radius: 5px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      transition: background 0.2s, color 0.2s;
+    }
+    #toggle-sidebar:hover {
+      background: linear-gradient(90deg, #ffb347, #ffcc70, #ff8008);
+      color: #232526;
+    }
+
+    /* Çıkış butonu */
+    .logout-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(90deg, #ffb347, #ffcc70, #ff8008);
+      color: #232526;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1200;
+      box-shadow: 0 2px 12px rgba(255,179,71,0.15);
+      transition: background 0.3s, color 0.3s, transform 0.2s;
+    }
+    .logout-btn:hover {
+      background: linear-gradient(90deg, #ff8008, #ffb347);
+      color: #232526;
+      transform: scale(1.05);
+    }
+
+    /* İçerik alanı */
+    .container {
+      margin-left: 270px;
+      padding: 20px;
+      transition: margin-left 0.3s ease;
+      position: relative;
+      left: 0;
+    }
+    .sidebar.closed + .container {
+      margin-left: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        margin-left: 0 !important;
+        left: 0 !important;
+      }
+      .sidebar {
+        width: 90vw;
+        border-radius: 0 0 20px 0;
+      }
     }
   </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GHOST GYM - Üye Paneli</title>
+  <link rel="stylesheet" href="styleuser.css" />
 </head>
 <body>
+  <!-- Çıkış Butonu -->
+  <button class="logout-btn" id="logout-btn">Çıkış Yap</button>
   <!-- Menü Butonu -->
   <button id="toggle-sidebar">☰ Menü</button>
 
@@ -96,6 +150,7 @@
     <a href="#">Ana Sayfa</a>
     <a href="updatemember.html">Hesabınız</a>
     <a href="help.html">Yardım</a>
+    <button class="logout-btn" style="position:static; width:100%; margin-top:16px;" onclick="logoutUser()">Çıkış Yap</button>
   </div>
 
   <!-- İçerik Alanı -->
@@ -131,58 +186,70 @@
     </footer>
   </div>
 
-  <!-- JavaScript: Menü kontrolü ve kullanıcı verisi -->
+  <!-- JavaScript: Menü kontrolü, kullanıcı verisi ve çıkış -->
   <script>
-    // Menü aç/kapat
-    const toggleButton = document.getElementById('toggle-sidebar');
-    const sidebar = document.querySelector('.sidebar');
+  // Menü aç/kapat
+  const toggleButton = document.getElementById('toggle-sidebar');
+  const sidebar = document.querySelector('.sidebar');
 
-    toggleButton.addEventListener('click', () => {
-      sidebar.classList.toggle('closed');
-    });
+  toggleButton.addEventListener('click', () => {
+    sidebar.classList.toggle('closed');
+  });
 
-    // Kullanıcı bilgisi çekme
-    const userId = localStorage.getItem('userId');
-
-    if (!userId) {
-      console.error('Kullanıcı kimliği bulunamadı. Giriş sayfasına yönlendiriliyor...');
+  // Çıkış yap fonksiyonu
+  function logoutUser() {
+    if (confirm("Çıkış yapmak istediğinizden emin misiniz?")) {
+      localStorage.clear();
       window.location.href = 'index.html';
-    } else {
-      console.log('Kullanıcı Kimliği:', userId);
-
-      const url = `https://localhost:7034/api/Manager/GetUniqueMember?id=${userId}`;
-
-      fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id: userId })
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Kullanıcı bilgileri alınamadı.');
-        }
-        return response.json();
-      })
-      .then(user => {
-        console.log('Kullanıcı Bilgileri:', user);
-        document.getElementById('header-user-name').textContent = user.nameSurname || 'Kullanıcı Adı';
-        document.getElementById('profile-user-name').textContent = user.nameSurname || 'Kullanıcı Adı';
-        document.getElementById('user-balance').textContent = user.balance || '0 TL';
-
-        if (user.membershipPeriod && user.membershipPeriod > 0) {
-          document.getElementById('user-subscription').textContent = `Aboneliğiniz ${user.membershipPeriod} gün geçerlidir.`;
-        } else {
-          document.getElementById('user-subscription').textContent = 'Aktif Aboneliğiniz Gözükmemektedir';
-        }
-      })
-      .catch(error => {
-        console.error('Hata:', error);
-        alert('Kullanıcı bilgileri alınırken bir hata oluştu. Lütfen tekrar giriş yapın.');
-        window.location.href = 'index.html';
-      });
     }
-  </script>
+    // Hayır'a basılırsa hiçbir şey yapılmaz, sayfa aynı kalır.
+  }
+
+  // Sağ üstteki çıkış butonu için de aynı fonksiyon
+  document.getElementById('logout-btn').onclick = logoutUser;
+
+  // Kullanıcı bilgisi çekme
+  const userId = localStorage.getItem('userId');
+
+  if (!userId) {
+    console.error('Kullanıcı kimliği bulunamadı. Giriş sayfasına yönlendiriliyor...');
+    window.location.href = 'index.html';
+  } else {
+    console.log('Kullanıcı Kimliği:', userId);
+
+    const url = `https://localhost:7034/api/Manager/GetUniqueMember?id=${userId}`;
+
+    fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: userId })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Kullanıcı bilgileri alınamadı.');
+      }
+      return response.json();
+    })
+    .then(user => {
+      console.log('Kullanıcı Bilgileri:', user);
+      document.getElementById('header-user-name').textContent = user.nameSurname || 'Kullanıcı Adı';
+      document.getElementById('profile-user-name').textContent = user.nameSurname || 'Kullanıcı Adı';
+      document.getElementById('user-balance').textContent = user.balance || '0 TL';
+
+      if (user.membershipPeriod && user.membershipPeriod > 0) {
+        document.getElementById('user-subscription').textContent = `Aboneliğiniz ${user.membershipPeriod} gün geçerlidir.`;
+      } else {
+        document.getElementById('user-subscription').textContent = 'Aktif Aboneliğiniz Gözükmemektedir';
+      }
+    })
+    .catch(error => {
+      console.error('Hata:', error);
+      alert('Kullanıcı bilgileri alınırken bir hata oluştu. Lütfen tekrar giriş yapın.');
+      window.location.href = 'index.html';
+    });
+  }
+</script>
 </body>
 </html>

@@ -2,9 +2,9 @@ body {
      margin: 0;
   padding: 40px 20px;
   font-family: 'Rubik', sans-serif;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #232526 0%, #414345 100%);
   min-height: 100vh;
-  color: #fff;
+  color: #ffb347; /* Turuncuya yakın metalik renk */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,7 +15,7 @@ body {
   font-weight: 700;
   text-align: center;
   margin-bottom: 30px;
-  background: linear-gradient(to right, #ffb347, #ffcc33);
+  background: linear-gradient(to right, #ffb347, #ffcc70, #ff8008);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -29,12 +29,12 @@ body {
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(40, 44, 52, 0.92);
   border-radius: 20px;
   overflow: hidden;
   text-align: center;
   backdrop-filter: blur(10px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.28);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -44,7 +44,7 @@ body {
 }
 
 .card a {
-  color: white;
+  color: #ffb347; /* Turuncuya yakın metalik renk */
   text-decoration: none;
   display: block;
 }
@@ -55,14 +55,16 @@ body {
   object-fit: cover;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+  filter: brightness(0.85) contrast(1.08);
 }
 
 .card h3 {
   font-size: 20px;
   padding: 15px 0;
   margin: 0;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
+  color: #ffb347; /* Turuncuya yakın metalik renk */
+  background: rgba(255, 255, 255, 0.03);
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
+  letter-spacing: 1px;
 }

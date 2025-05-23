@@ -1,7 +1,7 @@
 body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom right, #3f00ff, #00bfff);
-    color: #fff;
+    font-family: 'Rubik', Arial, sans-serif;
+    background: linear-gradient(135deg, #232526 0%, #414345 100%);
+    color: #ffb347; /* Turuncuya yakın metalik renk */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,22 +10,28 @@ body {
   }
   
   .container {
-    background-color: #1a1a40;
+    background: rgba(40, 44, 52, 0.92);
     padding: 30px;
     border-radius: 20px;
     width: 400px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+    backdrop-filter: blur(8px);
   }
   
   h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #ffcc00;
+    background: linear-gradient(to right, #ffb347, #ffcc70, #ff8008);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #ffb347;
   }
   
   label {
     display: block;
     margin-top: 15px;
+    color: #ffb347;
+    font-weight: bold;
   }
   
   input, select, button {
@@ -34,18 +40,32 @@ body {
     border-radius: 10px;
     border: none;
     margin-top: 5px;
+    background: #232526;
+    color: #ffb347;
+    font-size: 1rem;
+    border: 1px solid #ffb34733;
+  }
+  
+  input:focus, select:focus {
+    outline: 2px solid #ffb347;
+    background: #232526;
+    color: #ffcc70;
   }
   
   button {
-    background-color: #28a745;
-    color: white;
+    background: linear-gradient(90deg, #ffb347, #ffcc70, #ff8008);
+    color: #232526;
     font-weight: bold;
     cursor: pointer;
     margin-top: 20px;
+    transition: background 0.3s, color 0.3s;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(255,179,71,0.15);
   }
   
   button:hover {
-    background-color: #218838;
+    background: linear-gradient(90deg, #ffcc70, #ffb347, #ff8008);
+    color: #232526;
   }
   
   .error {
@@ -59,4 +79,3 @@ body {
     margin-top: 10px;
     font-weight: bold;
   }
-  

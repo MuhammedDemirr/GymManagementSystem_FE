@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="stylesetmember.css" />
 </head>
 <body>
+ 
   <div class="container">
     <h1>Üye Ölçü Bilgileri</h1>
 
@@ -23,8 +24,9 @@
       <input type="number" id="age" placeholder="Örneğin: 25">
     </div>
 
-    <button id="fetchInfo">Bilgileri Getir</button>
+    <!-- <button id="fetchInfo">Bilgileri Getir</button> -->
     <button id="updateInfo">Bilgileri Güncelle</button>
+    <button id="goHome">Ana Sayfaya Dön</button> <!-- Eklendi -->
   </div>
 
   <script>
@@ -40,19 +42,25 @@
     const weightInput = document.getElementById('weight');
     const heightInput = document.getElementById('height');
     const ageInput = document.getElementById('age');
-    const fetchInfoButton = document.getElementById('fetchInfo');
+    // const fetchInfoButton = document.getElementById('fetchInfo'); // Artık yok
     const updateInfoButton = document.getElementById('updateInfo');
+    const goHomeButton = document.getElementById('goHome'); // Eklendi
 
     const fetchEndpoint = 'https://localhost:7034/api/Manager/GetUniqueMember';
     const updateEndpoint = 'https://localhost:7034/api/Member/SetMemberInfo';
 
-    // Bilgileri Getir
-    fetchInfoButton.addEventListener('click', async () => {
+    // Ana sayfaya dönüş
+    goHomeButton.addEventListener('click', () => {
+      window.location.href = "user.html"; // user.html sayfasına yönlendir
+    });
+
+    // Sayfa yüklendiğinde bilgileri getir
+    window.addEventListener('DOMContentLoaded', async () => {
       try {
         const response = await fetch(fetchEndpoint, {
-          method: 'PUT', // POST isteği ile ID'yi body içinde gönderiyoruz
+          method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: userId }) // ID'yi body içinde gönder
+          body: JSON.stringify({ id: userId })
         });
 
         if (!response.ok) throw new Error("Bilgiler getirilemedi");
@@ -61,8 +69,7 @@
         weightInput.value = data.weight || '';
         heightInput.value = data.height || '';
         ageInput.value = data.age || '';
-
-        alert("Bilgiler başarıyla yüklendi.");
+        // alert("Bilgiler başarıyla yüklendi."); // Otomatik yüklendiği için alert gerekmez
       } catch (error) {
         console.error(error);
         alert("Bilgiler getirilirken hata oluştu.");
@@ -72,7 +79,7 @@
     // Bilgileri Güncelle
     updateInfoButton.addEventListener('click', async () => {
       const updatedInfo = {
-        id: userId, // ID'yi body içinde gönderiyoruz
+        id: userId,
         weight: weightInput.value,
         height: heightInput.value,
         age: ageInput.value
@@ -82,7 +89,7 @@
         const response = await fetch(updateEndpoint, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updatedInfo) // Tüm bilgileri body içinde gönder
+          body: JSON.stringify(updatedInfo)
         });
 
         if (!response.ok) throw new Error("Güncelleme başarısız");
@@ -94,5 +101,6 @@
       }
     });
   </script>
+
 </body>
 </html>
