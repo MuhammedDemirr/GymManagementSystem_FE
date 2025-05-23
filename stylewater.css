@@ -1,72 +1,139 @@
 /* Genel Ayarlar */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #6506ff; /* Daha yumuşak bir arka plan rengi */
+    font-family: 'Rubik', Arial, sans-serif;
+    background: linear-gradient(135deg, #232526 0%, #414345 100%);
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-  }
-  
-  /* Konteyner Stili */
-  .container {
+    color: #ffb347;
+}
+
+/* Konteyner Stili */
+.container {
     text-align: center;
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Daha hafif bir gölge */
-  }
-  
-  /* Başlık */
-  h1 {
-    color: #3dffdf; /* Daha koyu bir gri */
-  }
-  
-  /* Su Takip Alanı */
-  .water-tracker {
-    margin-top: 20px;
-  }
-  
-  #water-amount {
+    background: rgba(40, 44, 52, 0.92);
+    padding: 32px 22px 28px 22px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+    max-width: 370px;
+    width: 95%;
+    backdrop-filter: blur(8px);
+}
+
+/* Başlık */
+h1 {
     font-size: 2rem;
-    color: #0056b3; /* Daha koyu bir mavi */
-    margin: 10px 0;
-  }
-  
-  /* Butonlar */
-  .buttons {
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    background: linear-gradient(to right, #ffb347, #ffcc70, #ff8008);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #ffb347;
+}
+
+/* Su Takip Alanı */
+.water-tracker {
+    margin-top: 20px;
+}
+
+.water-tracker p {
+    color: #ffe0b2;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    margin-top: 0;
+    opacity: 0.92;
+}
+
+#water-amount {
+    font-size: 2.3rem;
+    color: #232526;
+    background: linear-gradient(90deg, #ffb347 0%, #ffcc70 100%);
+    border-radius: 12px;
+    padding: 8px 0;
+    margin: 12px 0 18px 0;
+    font-weight: bold;
+    box-shadow: 0 2px 12px rgba(255,179,71,0.10);
+    letter-spacing: 1px;
+}
+
+/* Butonlar */
+.buttons {
     display: flex;
     justify-content: center;
-    gap: 10px;
-  }
-  
-  button {
-    padding: 10px 20px;
-    font-size: 1rem;
+    gap: 18px;
+    margin-bottom: 12px;
+}
+
+button {
+    padding: 12px 26px;
+    font-size: 1.08rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  /* Artırma Butonu */
-  #increase-btn {
-    background-color: #007bff; /* Mavi ton */
-    color: white;
-  }
-  
-  #increase-btn:hover {
-    background-color: #0056b3; /* Daha koyu mavi */
-  }
-  
-  /* Azaltma Butonu */
-  #decrease-btn {
-    background-color: #ff6f61; /* Yumuşak kırmızı ton */
-    color: white;
-  }
-  
-  #decrease-btn:hover {
-    background-color: #e63946; /* Daha koyu kırmızı */
-  }
+    font-weight: bold;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+/* Artırma Butonu */
+#increase-btn {
+    background: linear-gradient(90deg, #2196f3 0%, #03a9f4 100%);
+    color: #fff;
+}
+
+#increase-btn:hover {
+    background: linear-gradient(90deg, #03a9f4 0%, #2196f3 100%);
+    color: #fff;
+}
+
+/* Azaltma Butonu */
+#decrease-btn {
+    background: linear-gradient(90deg, #ff5252 0%, #ff1744 100%);
+    color: #fff;
+}
+
+#decrease-btn:hover {
+    background: linear-gradient(90deg, #ff1744 0%, #ff5252 100%);
+    color: #fff;
+}
+
+/* Ana Sayfa Butonu */
+#home-btn {
+    margin-top: 18px;
+    padding: 12px 32px;
+    background: linear-gradient(90deg, #ffb347 0%, #ff8008 100%);
+    color: #232526;
+    border: none;
+    border-radius: 22px;
+    font-size: 1.08rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(255,179,71,0.13);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    letter-spacing: 1px;
+}
+
+#home-btn:hover {
+    background: linear-gradient(90deg, #ff8008 0%, #ffb347 100%);
+    color: #232526;
+    box-shadow: 0 4px 16px rgba(255,179,71,0.22);
+}
+
+@media (max-width: 500px) {
+    .container {
+        padding: 18px 6px 18px 6px;
+    }
+    h1 {
+        font-size: 1.3rem;
+    }
+    #water-amount {
+        font-size: 1.4rem;
+    }
+    button {
+        font-size: 0.98rem;
+        padding: 10px 12px;
+    }
+}

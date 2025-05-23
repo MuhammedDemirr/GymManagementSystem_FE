@@ -4,39 +4,45 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Üye Yönetimi</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #7b1fa2, #2196f3);
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(135deg, #232526 0%, #414345 100%);
       min-height: 100vh;
       padding: 20px;
-      color: #fff;
+      color: #ffb347;
     }
 
     .container {
       max-width: 1200px;
       margin: auto;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(40, 44, 52, 0.92);
       padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+      backdrop-filter: blur(8px);
     }
 
     h1 {
       text-align: center;
-      color: #ffc107;
+      background: linear-gradient(to right, #ffb347, #ffcc70, #ff8008);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: #ffb347;
       margin-bottom: 30px;
+      font-size: 2.2rem;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      background-color: rgba(255, 255, 255, 0.95);
-      border-radius: 10px;
+      background: rgba(40, 44, 52, 0.92);
+      border-radius: 12px;
       overflow: hidden;
-      color: #333;
+      color: #ffb347;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
     th, td {
@@ -45,12 +51,22 @@
     }
 
     th {
-      background-color: #1976d2;
-      color: white;
+      background: linear-gradient(to right, #ffb347, #ffcc70, #ff8008);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: #ffb347;
+      font-weight: bold;
+      font-size: 1.08rem;
+      border-bottom: 1px solid #ffb34733;
+    }
+
+    td {
+      color: #ffe0b2;
+      border-bottom: 1px solid #ffb34733;
     }
 
     tr:nth-child(even) {
-      background-color: #f2f2f2;
+      background: rgba(255,179,71,0.04);
     }
 
     .update-btn, .delete-btn {
@@ -59,24 +75,28 @@
       border-radius: 8px;
       cursor: pointer;
       font-weight: bold;
+      transition: background 0.2s, color 0.2s;
+      margin: 2px;
     }
 
     .update-btn {
-      background-color: #4caf50;
-      color: white;
+      background: linear-gradient(90deg, #ffb347, #ffcc70, #ff8008);
+      color: #232526;
     }
 
     .update-btn:hover {
-      background-color: #43a047;
+      background: linear-gradient(90deg, #ffcc70, #ffb347, #ff8008);
+      color: #232526;
     }
 
     .delete-btn {
-      background-color: #f44336;
-      color: white;
+      background: linear-gradient(90deg, #ff8008, #ffb347);
+      color: #fff;
     }
 
     .delete-btn:hover {
-      background-color: #e53935;
+      background: linear-gradient(90deg, #ffb347, #ff8008);
+      color: #232526;
     }
 
     @media (max-width: 768px) {
@@ -89,13 +109,14 @@
       }
 
       td {
-        background: white;
+        background: rgba(40, 44, 52, 0.92);
         margin-bottom: 10px;
         padding: 10px;
         border-radius: 8px;
         box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         text-align: left;
         position: relative;
+        color: #ffe0b2;
       }
 
       td::before {
@@ -103,7 +124,7 @@
         font-weight: bold;
         display: block;
         margin-bottom: 5px;
-        color: #1976d2;
+        color: #ffb347;
       }
     }
   </style>

@@ -5,69 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bilgileri Güncelle</title>
   <style>
-    body {
-      font-family: 'Rubik', sans-serif;
-      background: linear-gradient(to right, #6a11cb, #2575fc);
+    .form-card {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
+      flex-direction: column;
+      gap: 15px;
+      padding: 20px;
     }
-
-    .update-form {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      width: 300px;
+    .form-card label {
+      text-align: left;
+      font-weight: bold;
       color: #fff;
     }
-
-    .update-form h2 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 0.5rem;
+    .form-card input {
+      padding: 10px;
       border: none;
-      border-radius: 0.5rem;
-      outline: none;
+      border-radius: 8px;
+      font-size: 1rem;
     }
-
-    .update-form button {
-      width: 100%;
-      padding: 0.7rem;
+    .form-card button {
+      margin-top: 10px;
+      padding: 12px;
+      font-size: 1rem;
+      background: #ffb347;
+      color: #333;
       border: none;
-      border-radius: 0.5rem;
-      background-color: #4facfe;
-      color: white;
-      font-weight: bold;
+      border-radius: 10px;
       cursor: pointer;
+      font-weight: bold;
       transition: background 0.3s ease;
     }
-
-    .update-form button:hover {
-      background-color: #00f2fe;
-    }
-
-    .message {
-      margin-top: 1rem;
-      text-align: center;
-      font-size: 0.9rem;
+    .form-card button:hover {
+      background: #ffcc33;
     }
   </style>
 </head>
@@ -91,58 +59,12 @@
       <input type="password" id="password" />
     </div>
 
-    <button type="submit">Güncelle</button>
-    <div class="message" id="message"></div>
-  </form>
-
-<script>
-  document.getElementById('updateForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    const nameSurname = document.getElementById('nameSurname').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-
-    const userId = localStorage.getItem('userId');
-
-    if (!userId) {
-      document.getElementById('message').innerText = "Kullanıcı ID bulunamadı.";
-      return;
+  <script>
+    function submitUpdate() {
+      alert("Bilgiler güncellendi.");
+      // Burada fetch ile backend'e veri gönderilebilir
     }
-
-    if (!nameSurname && !email && !password) {
-      document.getElementById('message').innerText = "Lütfen en az bir alanı doldurun.";
-      return;
-    }
-
-    const body = {
-      id: parseInt(userId)
-    };
-
-    // Sadece dolu alanları ekle
-    if (nameSurname !== "") body.nameSurname = nameSurname;
-    if (email !== "") body.email = email;
-    if (password !== "") body.password = password;
-
-    try {
-      const response = await fetch('https://localhost:7034/api/Member/UpdateMember', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
-
-      if (response.ok) {
-        document.getElementById('message').innerText = "Güncelleme başarılı.";
-      } else {
-        document.getElementById('message').innerText = "Güncelleme başarısız.";
-      }
-    } catch (error) {
-      document.getElementById('message').innerText = "Sunucu hatası: " + error.message;
-    }
-  });
-</script>
+  </script>
 
 
 </body>

@@ -8,8 +8,8 @@
     body {
       margin: 0;
       font-family: 'Rubik', sans-serif;
-      background: linear-gradient(to right, #6a11cb, #2575fc);
-      color: #fff;
+      background: linear-gradient(135deg, #232526 0%, #414345 100%);
+      color: #ffb347; /* Turuncuya yakın metalik renk */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -17,51 +17,156 @@
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
-      padding: 30px;
-      max-width: 600px;
-      width: 90%;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      background: rgba(40, 44, 52, 0.92);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 36px 32px 28px 32px;
+      max-width: 480px;
+      width: 95%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
     }
 
     .card h2 {
-      font-size: 1.8rem;
-      margin-bottom: 20px;
+      font-size: 2rem;
+      margin-bottom: 10px;
+      text-align: center;
+      letter-spacing: 1px;
+      background: linear-gradient(to right, #ffb347, #ffcc70, #ff8008);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: #ffb347;
+    }
+
+    .body-type-badge {
+      background: linear-gradient(90deg, #ffb347 0%, #ffcc70 100%);
+      color: #232526;
+      font-weight: bold;
+      padding: 7px 18px;
+      border-radius: 20px;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 12px rgba(255,179,71,0.15);
+      display: inline-block;
+      border: none;
+    }
+
+    .program-list {
+      background: rgba(255,179,71,0.08);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-top: 8px;
+      color: #ffe0b2;
+      font-size: 1.07rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      list-style: none;
+    }
+
+    .program-list li {
+      margin-bottom: 10px;
+      padding-left: 0.5em;
+      position: relative;
+    }
+    .program-list li:before {
+      content: "•";
+      color: #ffb347;
+      font-weight: bold;
+      margin-right: 8px;
+      font-size: 1.1em;
+      position: relative;
+      top: -1px;
+    }
+
+    .program-title {
+      font-weight: bold;
+      font-size: 1.15rem;
+      margin-bottom: 6px;
+      color: #ffcc70;
       text-align: center;
     }
 
-    .program {
-      font-size: 1rem;
-      line-height: 1.6;
-      white-space: pre-line;
+    .loading, .error-message {
+      color: #ffe0b2;
+      font-size: 1.08rem;
+      margin: 10px 0;
+      text-align: center;
     }
 
-    .loading {
-      text-align: center;
-      font-style: italic;
-      opacity: 0.8;
+    .home-btn {
+      margin-top: 18px;
+      padding: 10px 28px;
+      background: linear-gradient(90deg, #ffb347 0%, #ff8008 100%);
+      color: #232526;
+      border: none;
+      border-radius: 22px;
+      font-size: 1.08rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(255,179,71,0.15);
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .home-btn:hover {
+      background: linear-gradient(90deg, #ff8008 0%, #ffb347 100%);
+      color: #232526;
+      box-shadow: 0 4px 16px rgba(255,179,71,0.25);
     }
   </style>
 </head>
 <body>
   <div class="card" id="diet-card">
-    <h2>Diyet Programı</h2>
-    <div class="program" id="diet-program">
-      <p class="loading">Yükleniyor...</p>
-    </div>
+    <h2>Diyet Programınız</h2>
+    <span class="body-type-badge" id="body-type-badge" style="display:none"></span>
+    <div class="program-title" id="program-title" style="display:none"></div>
+    <ul class="program-list" id="diet-program" style="display:none"></ul>
+    <div class="loading" id="loading-message">Yükleniyor...</div>
+    <div class="error-message" id="error-message" style="display:none"></div>
+    <button class="home-btn" onclick="window.location.href='user.html'">Ana Sayfaya Dön</button>
   </div>
 
   <script>
-    // Örnek: ID localStorage'da yoksa buradan test edebilirsin
-    // localStorage.setItem("userId", "10");
-
     const id = localStorage.getItem("userId");
-    const dietProgramDiv = document.getElementById("diet-program");
+    const dietProgramUl = document.getElementById("diet-program");
+    const badge = document.getElementById("body-type-badge");
+    const loading = document.getElementById("loading-message");
+    const errorMsg = document.getElementById("error-message");
+    const programTitle = document.getElementById("program-title");
+
+    function showError(msg) {
+      loading.style.display = "none";
+      badge.style.display = "none";
+      dietProgramUl.style.display = "none";
+      programTitle.style.display = "none";
+      errorMsg.innerText = msg;
+      errorMsg.style.display = "block";
+    }
+
+    function showProgram(bodyType, title, items) {
+      loading.style.display = "none";
+      errorMsg.style.display = "none";
+      badge.innerText = bodyType;
+      // Ortalama vücut tipi için özel class ekle
+      if (bodyType === "Ortalama Vücut Tipi") {
+        badge.classList.add("ortalama");
+      } else {
+        badge.classList.remove("ortalama");
+      }
+      badge.style.display = "inline-block";
+      programTitle.innerText = title;
+      programTitle.style.display = "block";
+      dietProgramUl.innerHTML = "";
+      items.forEach(item => {
+        const li = document.createElement("li");
+        li.innerText = item;
+        dietProgramUl.appendChild(li);
+      });
+      dietProgramUl.style.display = "block";
+    }
 
     if (!id) {
-      dietProgramDiv.innerText = "Kullanıcı ID bulunamadı.";
+      showError("Kullanıcı ID bulunamadı.");
     } else {
       fetch("https://localhost:7034/api/Member/GetBodyType", {
         method: "PUT",
@@ -78,48 +183,66 @@
         return response.json();
       })
       .then(data => {
-        console.log("API'den gelen:", data);
-
         const bodyType = data.data?.toLowerCase();
-        let program = "";
+        if (!bodyType) {
+          showError("Vücut tipi verisi alınamadı.");
+          return;
+        }
+
+        let programItems = [];
+        let badgeText = "";
+        let programTitleText = "";
 
         switch (bodyType) {
           case "zayıf":
-            program = `ZAYIF DİYET PROGRAMI:
-- Günde 5 öğün
-- Bol protein (yumurta, kırmızı et)
-- Ara öğünlerde kuruyemiş
-- Karbonhidrat ağırlıklı beslenme
-- Günde 2 litre su`;
+            badgeText = "Zayıf Vücut Tipi";
+            programTitleText = "Kilo Almak İçin Diyet Programı";
+            programItems = [
+              "Günde 5 öğün beslenin.",
+              "Her öğünde protein (yumurta, kırmızı et, tavuk, balık) alın.",
+              "Ara öğünlerde kuruyemiş ve süt ürünleri tüketin.",
+              "Karbonhidrat (pilav, makarna, patates) ağırlıklı beslenin.",
+              "Her gün 1 avuç fındık/badem/ceviz tüketin.",
+              "Günde en az 2 litre su için.",
+              "Şekerli içeceklerden uzak durun, doğal meyve suyu tercih edin."
+            ];
             break;
-
           case "ortalama":
-            program = `ORTALAMA VÜCUT DİYETİ:
-- 3 ana öğün, 2 ara öğün
-- Dengeli protein, karbonhidrat ve yağ
-- Sebze ve meyve tüketimi
-- Haftada 3 gün hafif egzersiz
-- Günde 2-2.5 litre su`;
+            badgeText = "Ortalama Vücut Tipi";
+            programTitleText = "Formunu Korumak İçin Diyet Programı";
+            programItems = [
+              "3 ana öğün, 2 ara öğün yapın.",
+              "Her öğünde dengeli protein, karbonhidrat ve yağ alın.",
+              "Sebze ve meyve tüketimini ihmal etmeyin.",
+              "Tam tahıllı ekmek ve baklagiller tercih edin.",
+              "Haftada 3 gün hafif egzersiz yapın.",
+              "Günde 2-2.5 litre su için.",
+              "Tatlı ve abur cubur tüketimini sınırlayın."
+            ];
             break;
-
           case "kilolu":
-            program = `KİLOLU DİYET PROGRAMI:
-- Kalori kontrolü: 1500-1800 kcal
-- Şeker ve unlu mamullerden uzak dur
-- Her gün 30 dk yürüyüş
-- Bol lifli gıdalar (sebze, tam tahıl)
-- Günde 3 litre su`;
+            badgeText = "Kilolu Vücut Tipi";
+            programTitleText = "Kilo Vermek İçin Diyet Programı";
+            programItems = [
+              "Günlük kalori: 1500-1800 kcal arası tutun.",
+              "Şeker ve unlu mamullerden uzak durun.",
+              "Her gün 30 dakika yürüyüş yapın.",
+              "Bol lifli gıdalar (sebze, tam tahıl) tüketin.",
+              "Kızartmalardan kaçının, haşlama veya ızgara tercih edin.",
+              "Günde 3 litre su için.",
+              "Akşam 7'den sonra yemek yememeye çalışın."
+            ];
             break;
-
           default:
-            program = "Vücut tipi verisi alınamadı.";
+            showError("Vücut tipi verisi alınamadı.");
+            return;
         }
 
-        dietProgramDiv.innerText = program.trim();
+        showProgram(badgeText, programTitleText, programItems);
       })
       .catch(error => {
         console.error("Hata:", error);
-        dietProgramDiv.innerText = "Sunucuya bağlanılamadı.";
+        showError("Sunucuya bağlanılamadı.");
       });
     }
   </script>

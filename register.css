@@ -1,8 +1,8 @@
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #3b1c90, #6a23c8, #377dfc);
-    color: #fff;
+    font-family: 'Rubik', Arial, sans-serif;
+    background: linear-gradient(135deg, #232526 0%, #414345 100%);
+    color: #ffb347; /* Turuncuya yakın metalik renk */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -20,12 +20,14 @@ body {
 h1 {
     font-size: 2.5em;
     font-weight: bold;
-    color: #ffd700;
+    background: linear-gradient(to right, #ffb347, #ffcc70, #ff8008);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin: 0;
 }
 
 form {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(40, 44, 52, 0.92);
     padding: 30px 40px;
     border-radius: 20px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
@@ -38,40 +40,43 @@ input {
     width: 100%;
     padding: 12px;
     margin-bottom: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid #ffb34733;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    background: #232526;
+    color: #ffb347;
     font-size: 1em;
     outline: none;
     transition: all 0.3s ease;
 }
 
 input:focus {
-    border-color: #ffd700;
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    border-color: #ffb347;
+    background: #232526;
+    color: #ffcc70;
+    box-shadow: 0 0 10px rgba(255, 179, 71, 0.25);
 }
 
 input::placeholder {
-    color: #ccc;
+    color: #ffe0b2;
     font-style: italic;
 }
 
 button {
     width: 100%;
     padding: 12px;
-    background-color: #ffd700;
-    color: #333;
+    background: linear-gradient(90deg, #ffb347, #ffcc70, #ff8008);
+    color: #232526;
     border: none;
     border-radius: 12px;
     font-weight: bold;
     font-size: 1em;
     cursor: pointer;
     margin-top: 10px;
-    transition: background-color 0.3s ease;
+    transition: background 0.3s, color 0.3s;
+    box-shadow: 0 2px 12px rgba(255,179,71,0.15);
 }
 
 button:hover {
-    background-color: #e6c200;
+    background: linear-gradient(90deg, #ffcc70, #ffb347, #ff8008);
+    color: #232526;
 }
