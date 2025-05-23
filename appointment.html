@@ -59,64 +59,66 @@ async function fetchTrainers() {
   return trainers;
 }
 
+function createAppointment() {
+  const dateInput = document.getElementById('date').value;
+  const errorDiv = document.getElementById('error-message');
+  const successDiv = document.getElementById('success-message');
 
-    function createAppointment() {
-      const dateInput = document.getElementById('date').value;
-      const errorDiv = document.getElementById('error-message');
-      const successDiv = document.getElementById('success-message');
+  errorDiv.style.display = 'none';
+  successDiv.style.display = 'none';
 
-      errorDiv.style.display = 'none';
-      successDiv.style.display = 'none';
+  if (!dateInput) {
+    errorDiv.innerText = 'Lütfen bir tarih seçiniz!';
+    errorDiv.style.display = 'block';
+    return;
+  }
 
-      if (!dateInput) {
-        errorDiv.innerText = 'Lütfen bir tarih seçiniz!';
-        errorDiv.style.display = 'block';
-        return;
-      }
+  const [year, month, day] = dateInput.split('-');
+  const selectedDate = new Date(Date.UTC(year, month - 1, day));
+  selectedDate.setUTCHours(10, 0, 0, 0); // örnek: 10:00 UTC saat ayarı
 
-      const [year, month, day] = dateInput.split('-');
-      const selectedDate = new Date(Date.UTC(year, month - 1, day));
-      const today = new Date();
-      today.setUTCHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
 
-      if (selectedDate < today) {
-        errorDiv.innerText = 'Geçmiş bir tarih seçilemez!';
-        errorDiv.style.display = 'block';
-        return;
-      }
+  if (selectedDate < today) {
+    errorDiv.innerText = 'Geçmiş bir tarih seçilemez!';
+    errorDiv.style.display = 'block';
+    return;
+  }
 
-      const userId = localStorage.getItem('userId');
-      if (!userId || isNaN(parseInt(userId))) {
-        errorDiv.innerText = 'Kullanıcı ID bulunamadı! Lütfen giriş yapınız.';
-        errorDiv.style.display = 'block';
-        return;
-      }
+  const userId = localStorage.getItem('userId');
+  if (!userId || isNaN(parseInt(userId))) {
+    errorDiv.innerText = 'Kullanıcı ID bulunamadı! Lütfen giriş yapınız.';
+    errorDiv.style.display = 'block';
+    return;
+  }
 
-      const appointment = {
-        Date: selectedDate.toISOString(),
-        Status: true,
-        MemberId: parseInt(userId)
-      };
+  const appointment = {
+    Date: selectedDate.toISOString(),
+    Status: true, // ✅ doğru değer
+    MemberId: parseInt(userId)
+  };
 
-      fetch('https://localhost:7034/api/Member/CreateAppointment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(appointment)
-      })
-      .then(response => {
-        if (!response.ok) throw new Error('Sunucu hatası: ' + response.status);
-        return response.json();
-      })
-      .then(data => {
-        successDiv.innerText = '✅ Randevunuz başarıyla kaydedildi.';
-        successDiv.style.display = 'block';
-        document.getElementById('date').value = '';
-      })
-      .catch(error => {
-        errorDiv.innerText = 'Randevu oluşturulamadı: ' + error.message;
-        errorDiv.style.display = 'block';
-      });
-    }
+  fetch('https://localhost:7034/api/Member/CreateAppointment', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(appointment)
+  })
+  .then(response => {
+    if (!response.ok) throw new Error('Sunucu hatası: ' + response.status);
+    return response.json();
+  })
+  .then(data => {
+    successDiv.innerText = '✅ Randevunuz başarıyla kaydedildi.';
+    successDiv.style.display = 'block';
+    document.getElementById('date').value = '';
+  })
+  .catch(error => {
+    errorDiv.innerText = 'Randevu oluşturulamadı: ' + error.message;
+    errorDiv.style.display = 'block';
+  });
+}
+
 
     async function loadUserAppointments() {
       const errorDiv = document.getElementById('error-message');
