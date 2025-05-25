@@ -68,3 +68,27 @@ body {
   border-bottom-right-radius: 20px;
   letter-spacing: 1px;
 }
+
+.back-to-home {
+  text-align: center;
+  margin-top: 100px; /* Daha fazla boşluk için artırıldı */
+}
+
+.home-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #ff8008, #ffb347);
+  color: #232526; /* Koyu renk yazı */
+  text-decoration: none;
+  border-radius: 5px;
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(255, 128, 8, 0.4);
+  transition: all 0.3s ease;
+}
+
+.home-button:hover {
+  background: linear-gradient(135deg, #ffb347, #ffcc70);
+  box-shadow: 0 6px 20px rgba(255, 128, 8, 0.6);
+  transform: scale(1.05);
+}

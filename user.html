@@ -126,6 +126,48 @@
         border-radius: 0 0 20px 0;
       }
     }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 0 0 24px 0;
+      padding: 16px;
+      background: rgba(255, 179, 71, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffb347, #ff8008);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #232526;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .info-box {
+      flex: 1;
+    }
+
+    .qr-code {
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
+    }
+
+    .qr-code img {
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
   </style>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -139,7 +181,7 @@
   <button id="toggle-sidebar">☰ Menü</button>
 
   <!-- Sol Menü -->
-  <div class="sidebar">
+  <div class="sidebar closed">
     <h2> * </h2>
     <a href="setmemberinfo.html">Ölçümleriniz</a>
     <a href="training.html">Antrenman</a>
@@ -167,6 +209,9 @@
         <h2 id="profile-user-name">Kullanıcı Adı</h2>
         <p>Bakiye: <strong id="user-balance">0 TL</strong></p>
         <p id="user-subscription">Aktif Aboneliğiniz Çözükmemektedir</p>
+      </div>
+      <div class="qr-code">
+        <img src="photo/indir.png" alt="QR Kodunuz" />
       </div>
     </div>
     
