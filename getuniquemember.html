@@ -91,7 +91,28 @@
             text-align: left;
             border-bottom: 1px solid #ffb34733;
         }
+.back-to-home {
+    margin-top: 20px;
+    text-align: center;
+  }
 
+  .home-button {
+    display: inline-block;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #ff8008, #ffb347);
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 15px rgba(255, 128, 8, 0.4);
+  }
+
+  .home-button:hover {
+    background: linear-gradient(135deg, #ffb347, #ffcc70);
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 128, 8, 0.6);
+  }
         th {
             background: linear-gradient(to right, #ffb347, #ffcc70, #ff8008);
             -webkit-background-clip: text;
@@ -107,20 +128,23 @@
 </head>
 <body>
     <h1>Üye Bilgilerini Getir</h1>
-    <label for="memberId">Üye ID girin:</label>
-    <input type="text" id="memberId" placeholder="ID girin">
+    <label for="memberNameSurname">Üye Ad Soyad girin:</label>
+    <input type="text" id="memberNameSurname" placeholder="Ad Soyad girin">
     <button id="getMember">Getir</button>
 
     <h2>Üye Bilgileri:</h2>
     <div id="responseMessage">Henüz veri yok.</div>
+    <div class="back-to-home">
+    <a href="admin.html" class="home-button">Ana Sayfaya Dön</a>
+  </div>
 
     <script>
         document.getElementById('getMember').addEventListener('click', async () => {
-            const id = document.getElementById('memberId').value;
+            const name = document.getElementById('memberNameSurname').value.trim();
             const responseMessage = document.getElementById('responseMessage');
 
-            if (!id) {
-                responseMessage.innerHTML = 'Lütfen geçerli bir Üye ID girin.';
+            if (!name) {
+                responseMessage.innerHTML = 'Lütfen geçerli bir Ad Soyad girin.';
                 return;
             }
 
@@ -130,16 +154,15 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ id: parseInt(id) })
+                    body: JSON.stringify({ nameSurname: name })
                 });
 
                 if (!response.ok) {
-                    throw new Error(`Hata: ${response.status} - ${response.statusText}`);
+                    throw new Error(Hata: ${response.status} - ${response.statusText});
                 }
 
                 const data = await response.json();
 
-                // Tabloyu oluştur
                 const table = `
                     <table>
                         <tr><th>Alan</th><th>Bilgi</th></tr>
@@ -154,7 +177,7 @@
                 responseMessage.innerHTML = table;
 
             } catch (error) {
-                responseMessage.innerHTML = `Üye bilgileri alınamadı: ${error.message}`;
+                responseMessage.innerHTML = Üye bilgileri alınamadı: ${error.message};
             }
         });
     </script>

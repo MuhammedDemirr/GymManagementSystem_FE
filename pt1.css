@@ -1,0 +1,78 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #232526 0%, #414345 100%);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  width: 90%;
+  max-width: 800px;
+  background: rgba(40, 44, 52, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #ffb347;
+}
+
+.trainer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.trainer-item {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  color: #fff;
+  text-align: left;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.trainer-item:hover {
+  transform: scale(1.02);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+#message {
+  margin-top: 20px;
+  font-size: 1rem;
+  color: #ffb347;
+}
+
+.back-to-home {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.home-button {
+  display: inline-block;
+  padding: 12px 25px;
+  background: linear-gradient(135deg, #ff8008, #ffb347);
+  color: #000000;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 15px rgba(255, 128, 8, 0.4);
+}
+
+.home-button:hover {
+  background: linear-gradient(135deg, #ffb347, #ffcc70);
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(255, 128, 8, 0.6);
+}

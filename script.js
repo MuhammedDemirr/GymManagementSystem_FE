@@ -9,7 +9,7 @@ const POST_MEMBER_URL = BASE_URL;
 
 // Üye ekleme
 document.getElementById("addUserForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+  e.preventDefault(); // Formun varsayılan gönderimini engelle
 
   const name = document.getElementById("nameSurname").value;
   const email = document.getElementById("email").value;
@@ -27,11 +27,13 @@ document.getElementById("addUserForm").addEventListener("submit", async (e) => {
     });
 
     if (!res.ok) throw new Error(`API Hatası: ${res.status}`);
+    
 
-    document.getElementById("addUserForm").reset();
-    //fetchUsers(); // Listeyi güncelle
+    alert("Kayıt başarılı! Ana sayfaya yönlendiriliyorsunuz.");
+    window.location.href = "index.html"; // Ana sayfaya yönlendir
   } catch (err) {
     console.error("Kullanıcı eklenemedi:", err.message);
+    alert("Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.");
   }
 });
 

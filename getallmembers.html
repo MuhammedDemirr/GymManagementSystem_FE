@@ -49,7 +49,28 @@
       padding: 12px 15px;
       text-align: center;
     }
+ .back-to-home {
+    margin-top: 20px;
+    text-align: center;
+  }
 
+  .home-button {
+    display: inline-block;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #ff8008, #ffb347);
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 15px rgba(255, 128, 8, 0.4);
+  }
+
+  .home-button:hover {
+    background: linear-gradient(135deg, #ffb347, #ffcc70);
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 128, 8, 0.6);
+  }
     th {
       background: linear-gradient(to right, #ffb347, #ffcc70, #ff8008);
       -webkit-background-clip: text;
@@ -96,6 +117,27 @@
 
     .delete-btn:hover {
       background: linear-gradient(90deg, #ffb347, #ff8008);
+      color: #232526;
+    }
+
+    .back-to-home {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .home-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background: linear-gradient(90deg, #ffb347, #ffcc70, #ff8008);
+      color: #232526;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .home-button:hover {
+      background: linear-gradient(90deg, #ffcc70, #ffb347, #ff8008);
       color: #232526;
     }
 
@@ -152,6 +194,9 @@
         <!-- Üyeler JS ile eklenecek -->
       </tbody>
     </table>
+    <div class="back-to-home">
+      <a href="admin.html" class="home-button">Ana Sayfaya Dön</a>
+    </div>
   </div>
 
   <script>
